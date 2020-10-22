@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.kiwiproject</groupId>
+        <artifactId>kiwi-parent</artifactId>
+        <version>0.2.0</version>
+    </parent>
+
+    <artifactId>dropwizard-client-poller</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>
+        A library to provide an HTTP poller that integrates into Dropwizard applications.
+    </description>
+    <url>https://github.com/kiwiproject/dropwizard-client-poller</url>
+    <inceptionYear>2020</inceptionYear>
+
+    <scm>
+        <connection>scm:git:https://github.com/kiwiproject/dropwizard-client-poller.git</connection>
+        <developerConnection>scm:git:git@github.com:kiwiproject/dropwizard-client-poller.git</developerConnection>
+        <url>https://github.com/kiwiproject/dropwizard-client-poller</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <properties>
+    </properties>
+
+    <dependencies>
+
+        <!--
+        NOTES:
+        1. Exclusions are due to version conflicts (found using Maven Enforcer plugin)
+        2. When there are version conflicts, we exclude that dependency, then add an explicit dependency.
+        -->
+
+        <!-- required dependencies -->
+
+        <!-- provided dependencies -->
+
+        <!-- optional dependencies -->
+
+        <!-- test dependendcies -->
+
+    </dependencies>
+
+</project>
+
