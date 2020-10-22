@@ -8,4 +8,4 @@
 [![Maven Central](https://img.shields.io/maven-central/v/org.kiwiproject/dropwizard-client-poller)](https://search.maven.org/search?q=g:org.kiwiproject%20a:dropwizard-client-poller)
 
 Dropwizard Client Poller provides a simple HTTP polling capability using a Jersey Client
-and integrated with Dropwizard.
+and integrated with Dropwizard to provide health checks.
