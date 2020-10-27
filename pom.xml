@@ -28,6 +28,18 @@
     </scm>
 
     <properties>
+        <!-- Versions for required dependencies -->
+        <dropwizard.version>2.0.14</dropwizard.version>
+
+        <!-- Versions for provided dependencies -->
+
+        <!-- Versions for optional dependencies -->
+
+        <!-- Versions for test dependencies -->
+
+        <!-- Versions for plugins -->
+
+        <!-- Build properties -->
     </properties>
 
     <dependencies>
@@ -39,6 +51,11 @@
         -->
 
         <!-- required dependencies -->
+        <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-client</artifactId>
+            <version>${dropwizard.version}</version>
+        </dependency>
 
         <!-- provided dependencies -->
 
