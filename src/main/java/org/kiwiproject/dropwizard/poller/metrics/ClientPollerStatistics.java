@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * Defines contract for collecting basic statistics on {@link ClientPoller ) instances.
+ * Defines contract for collecting basic statistics on {@link ClientPoller} instances.
  */
 //TODO: Do we want to enhance this to be stats per host?
 public interface ClientPollerStatistics {
@@ -64,7 +64,7 @@ public interface ClientPollerStatistics {
     Optional<Long> lastFailureTimeInMillis();
 
     /**
-     * Returns a {@link Stream) over recent timestamps of poll failures.
+     * Returns a {@link Stream} over recent timestamps of poll failures.
      * <p>
      * The implementation determines the limit of the number failures that may be retained and thus returned in the stream.
      * Clients can use stream methods like {@link Stream#limit(long)} to specify a limit of their choosing, which may be
@@ -73,7 +73,7 @@ public interface ClientPollerStatistics {
     Stream<Long> recentFailureTimesInMillis();
 
     /**
-     * Returns a {@link Stream) of Map<String, Object> of error attributes for recent poll failures
+     * Returns a {@link Stream} of Map<String, Object> of error attributes for recent poll failures
      * <p>
      * The implementation should return a number of failure details less than or equal to the number returned from
      * recentFailureTimesInMillis. Clients can use stream methods like {@link Stream#limit(long)} to specify a limit

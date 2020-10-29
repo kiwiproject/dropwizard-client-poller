@@ -27,7 +27,7 @@ import java.util.stream.Stream;
  * <p>
  * This implementation is <em>effectively thread-safe<em> if each {@link ClientPoller} is using its own
  * {@link ClientPollerStatistics} instance. This is true because a poller instance is scheduled to execute at a
- * fixed-rate and so it sleeps, executes, sleeps, executes, etc. Thus there is only <em>one</em> poller instances acting
+ * fixed-rate and so it sleeps, executes, sleeps, executes, etc. Thus there is only <em>one</em> poller instance acting
  * on its {@link ClientPollerStatistics} instance at any given time.
  */
 @Slf4j
@@ -69,7 +69,7 @@ public class DefaultClientPollerStatistics implements ClientPollerStatistics {
 
     /**
      * @implNote This is left public for now, so we can expose it with new methods, e.g. one that returns a
-     * {@code Stream<FailedPollResult}.
+     * {@code Stream<FailedPollResult>}.
      */
     @SuppressWarnings("WeakerAccess")
     public static class FailedPollResult {

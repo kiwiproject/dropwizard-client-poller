@@ -72,7 +72,6 @@ public class ClientPoller {
 
     /**
      * Whether to poll using fixed rate or with fixed delay, as defined by {@link ScheduledExecutorService}.
-     * <p>
      *
      * @implNote This enum should only have TWO values corresponding to the two ways of scheduling on a
      * {@link ScheduledExecutorService}. There is no way to enforce that, however.
@@ -84,7 +83,8 @@ public class ClientPoller {
     }
 
     /**
-     * The URI the poller is polling. <em>Not required, but recommended</em>
+     * The URI the poller is polling. This will be set if the {@link SyncInvoker} provided is an instance of
+     * {@link PollerSyncInvokerWrapper}
      * <p>
      * NOTE: only used for logging purposes. It will be overwritten so we should not ever manually set it.
      */
@@ -95,7 +95,7 @@ public class ClientPoller {
      */
     @Getter
     @Builder.Default
-    private String name = "Poller_" + System.currentTimeMillis();
+    private final String name = "Poller_" + System.currentTimeMillis();
 
     /**
      * Supplies the invoker used to make the repeating REST call. <em>Required</em>
@@ -110,61 +110,50 @@ public class ClientPoller {
     /**
      * How the consumer should handle responses, sync or async. <em>Default is async</em,
      */
-    @SuppressWarnings("UnusedAssignment")
     @Builder.Default
-    private ConsumerType consumerType = ConsumerType.ASYNC;
+    private final ConsumerType consumerType = ConsumerType.ASYNC;
 
     /**
      * The value after which a synchronous response consumer will time out.
      */
-    @SuppressWarnings("UnusedAssignment")
     @Getter(AccessLevel.PACKAGE)
     @Builder.Default
-    private Long syncConsumerTimeout = DEFAULT_SYNC_RESPONSE_CONSUMER_TIMEOUT;
+    private final Long syncConsumerTimeout = DEFAULT_SYNC_RESPONSE_CONSUMER_TIMEOUT;
 
     /**
      * The unit of the synchronous response consumer time out value.
      */
-    @SuppressWarnings("UnusedAssignment")
     @Getter(AccessLevel.PACKAGE)
     @Builder.Default
-    private TimeUnit syncConsumerTimeoutUnit = DEFAULT_SYNC_RESPONSE_CONSUMER_TIMEOUT_UNIT;
+    private final TimeUnit syncConsumerTimeoutUnit = DEFAULT_SYNC_RESPONSE_CONSUMER_TIMEOUT_UNIT;
 
     /**
      * The value after which the {@link #supplier} will time out, e.g. if a poll is taking a very long time.
      */
-    @SuppressWarnings("UnusedAssignment")
     @Getter(AccessLevel.PACKAGE)
     @Builder.Default
-    private Long supplierTimeout = DEFAULT_SUPPLIER_TIMEOUT;
+    private final Long supplierTimeout = DEFAULT_SUPPLIER_TIMEOUT;
 
     /**
      * The unit of the {@link #supplierTimeout}.
      */
-    @SuppressWarnings("UnusedAssignment")
     @Getter(AccessLevel.PACKAGE)
     @Builder.Default
-    private TimeUnit supplierTimeoutUnit = DEFAULT_SUPPLIER_TIMEOUT_UNIT;
+    private final TimeUnit supplierTimeoutUnit = DEFAULT_SUPPLIER_TIMEOUT_UNIT;
 
     /**
      * The delay before polling will begin.
      */
-    @SuppressWarnings("UnusedAssignment")
     @Builder.Default
-    private Duration initialExecutionDelay = DEFAULT_INITIAL_EXECUTION_DELAY;
+    private final Duration initialExecutionDelay = DEFAULT_INITIAL_EXECUTION_DELAY;
 
     /**
      * The decision function that determines whether a poll should actually occur when the executor executes.
      * <p>
      * If not provided, a default decision function is used that always returns true.
-     *
-     * @implNote Suppress 54276 (Functional Interfaces should be as specialised as possible) because while the default
-     * {@link Function} doesn't use the {@link ClientPollerStatistics}, users might choose to use it, for example
-     * don't poll if we've had more than N failures in the last 5 minutes.
      */
-    @SuppressWarnings({"UnusedAssignment", "squid:54276"})
     @Builder.Default
-    private Function<ClientPollerStatistics, Boolean> decisionFunction = clientPollerStatistics -> true;
+    private final Function<ClientPollerStatistics, Boolean> decisionFunction = clientPollerStatistics -> true;
 
     /**
      * Interval by which the poller polls (in milliseconds). <em>Required as a positive value.</em>
@@ -189,9 +178,8 @@ public class ClientPoller {
      * @implNote Each poller should have its own statistics instance (as it does not make sense to share statistics
      * between multiple pollers and could lead to misleading or erroneous results). Also
      */
-    @SuppressWarnings("UnusedAssignment")
     @Builder.Default
-    private ClientPollerStatistics statistics = ClientPollerStatistics.newClientPollerStatisticsOfDefaultType();
+    private final ClientPollerStatistics statistics = ClientPollerStatistics.newClientPollerStatisticsOfDefaultType();
 
     /**
      * Used to track whether this poller is polling or not.
@@ -407,22 +395,21 @@ public class ClientPoller {
     }
 
     /**
-     * Returns the Wink ClientPollerStatistics} instance that is collecting stats for this poller.
+     * Returns the {@link ClientPollerStatistics} instance that is collecting stats for this poller.
      */
     public ClientPollerStatistics statistics() {
         return statistics;
     }
 
     /**
-     * ,
-     * Return {@code true)if this poller is asynchronous, otherwise {@code false).
+     * Return {@code true} if this poller is asynchronous, otherwise {@code false).
      */
     public boolean isAsync() {
         return consumerType.isAsync();
     }
 
     /**
-     * Return f@code true) if this poller is currently polling, or {@code false) if it has not been started yet
+     * Return {@code true} if this poller is currently polling, or {@code false} if it has not been started yet
      * or if it has been stopped.
      */
     public boolean isPolling() {
