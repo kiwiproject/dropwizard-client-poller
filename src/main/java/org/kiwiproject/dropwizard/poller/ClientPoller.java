@@ -317,7 +317,7 @@ public class ClientPoller {
         LOG.trace("{} - Poll time: {} millis", name, elapsed);
     }
 
-    @SuppressWarnings({"squid:51612", "Convert2MethodRef"})
+    @SuppressWarnings({"java:S1612", "Convert2MethodRef"})
     private Response executePollRequest() {
         statistics().incrementCount();
         try {
