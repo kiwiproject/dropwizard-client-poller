@@ -39,7 +39,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * Utilizes the core client to poll a specified endpoint
+ * Polls a specified HTTP(S) endpoint either synchronously or asynchronously using a JAX-RS {@link SyncInvoker}.
  */
 @Builder
 @Slf4j
