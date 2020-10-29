@@ -225,7 +225,7 @@ public class DefaultClientPollerStatistics implements ClientPollerStatistics {
 
     @VisibleForTesting
     int numberOfFailureDetails() {
-        return recentFailures.size() > FAILURE_DETAIL_LIMIT ? FAILURE_DETAIL_LIMIT : recentFailures.size();
+        return (recentFailures.size() > FAILURE_DETAIL_LIMIT) ? FAILURE_DETAIL_LIMIT : recentFailures.size();
     }
 
     @Override
