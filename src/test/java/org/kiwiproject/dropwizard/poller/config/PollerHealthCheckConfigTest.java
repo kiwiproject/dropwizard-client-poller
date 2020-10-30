@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -41,6 +40,7 @@ class PollerHealthCheckConfigTest {
         void shouldSetDefaultValues_WhenExplicitlyGivenAllNulls(SoftAssertions softly) {
             config = PollerHealthCheckConfig.builder()
                     .averageLatencyWarningThreshold(null)
+                    .missingPollMultiplier(null)
                     .build();
 
             assertDefaultValues(softly);
@@ -51,6 +51,7 @@ class PollerHealthCheckConfigTest {
     private void assertDefaultValues(SoftAssertions softly) {
         // NOTE: Keeping SoftAssertions here because there will be more as I add more health checks
         softly.assertThat(config.getAverageLatencyWarningThreshold().toMilliseconds()).isEqualTo(DEFAULT_AVG_LATENCY_WARNING_THRESHOLD_MILLIS);
+        softly.assertThat(config.getMissingPollMultiplier()).isEqualTo(10);
     }
 
     @Nested
@@ -61,14 +62,15 @@ class PollerHealthCheckConfigTest {
             config = deserializeAndExtractConfig("full-config.yml");
 
             softly.assertThat(config.getAverageLatencyWarningThreshold().toSeconds()).isEqualTo(5);
+            softly.assertThat(config.getMissingPollMultiplier()).isEqualTo(15);
         }
 
         @Test
-        @Disabled(value = "Will be enabled once we have more health checks")
         void shouldRespectDefaultValues(SoftAssertions softly) {
             config = deserializeAndExtractConfig("minimal-config.yml");
 
             softly.assertThat(config.getAverageLatencyWarningThreshold().toMilliseconds()).isEqualTo(DEFAULT_AVG_LATENCY_WARNING_THRESHOLD_MILLIS);
+            softly.assertThat(config.getMissingPollMultiplier()).isEqualTo(12); // not the default, but need at least one property
         }
 
         private PollerHealthCheckConfig deserializeAndExtractConfig(String configFileName) {
@@ -114,6 +116,24 @@ class PollerHealthCheckConfigTest {
             var numExpectedViolations = numExpectedViolations(isValid);
 
             assertPropertyViolations(config, "averageLatencyWarningThreshold", numExpectedViolations);
+        }
+
+        @ParameterizedTest
+        @CsvSource({
+                "4, false",
+                "5, true",
+                "25, true",
+                "50, true",
+                "51, false"
+        })
+        void shouldValidate_missingPollMultiplier(int missingPollMultiplier, boolean isValid) {
+            config = PollerHealthCheckConfig.builder()
+                    .missingPollMultiplier(missingPollMultiplier)
+                    .build();
+
+            var numExpectedViolations = numExpectedViolations(isValid);
+
+            assertPropertyViolations(config, "missingPollMultiplier", numExpectedViolations);
         }
 
         private int numExpectedViolations(boolean isValid) {

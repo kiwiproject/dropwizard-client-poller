@@ -2,3 +2,4 @@
 dummyValue: "Full Config"
 healthCheckConfig:
   averageLatencyWarningThreshold: 5 seconds
+  missingPollMultiplier: 15
