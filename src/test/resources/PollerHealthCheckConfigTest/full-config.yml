@@ -1,0 +1,4 @@
+---
+dummyValue: "Full Config"
+healthCheckConfig:
+  averageLatencyWarningThreshold: 5 seconds
