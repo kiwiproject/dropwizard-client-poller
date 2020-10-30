@@ -4,7 +4,7 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 import static org.kiwiproject.base.KiwiStrings.format;
 import static org.kiwiproject.metrics.health.HealthCheckResults.newUnhealthyResultBuilder;
 
-import com.codahale.metrics.health.HealthCheck;
+import com.codahale.metrics.health.HealthCheck.Result;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.experimental.UtilityClass;
 import org.kiwiproject.dropwizard.poller.metrics.ClientPollerStatistics;
@@ -16,6 +16,9 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+/**
+ * Utility class used by the poller health checks that provides common utilities for generating names and results for the health check.
+ */
 @UtilityClass
 public class ClientPollerHealthChecks {
 
@@ -63,21 +66,21 @@ public class ClientPollerHealthChecks {
     }
 
     /**
-     * Build an unhealthy {@link com.codahale.metrics.health.HealthCheck.Result} using the given statistics,
+     * Build an unhealthy {@link Result} using the given statistics,
      * message, and arguments using {@link HealthStatus#WARN} as the severity. The message can be a template, which
      * will be formatted by Dropwizard Metrics using {@link String#format(String, Object...)}.
      *
      * @param statistics      the statistics from which to obtain recent failure details
      * @param messageTemplate the message or message template
      * @param args            arguments for the messageTemplate
-     * @return the unhealthy {@link com.codahale.metrics.health.HealthCheck.Result}
+     * @return the unhealthy {@link Result}
      */
-    public static HealthCheck.Result unhealthy(ClientPollerStatistics statistics, String messageTemplate, Object... args) {
+    public static Result unhealthy(ClientPollerStatistics statistics, String messageTemplate, Object... args) {
         return unhealthy(statistics, HealthStatus.WARN, messageTemplate, args);
     }
 
     /**
-     * Build an unhealthy {@link com.codahale.metrics.health.HealthCheck.Result} using the given statistics, severity,
+     * Build an unhealthy {@link Result} using the given statistics, severity,
      * message, and arguments. The message can be a template, which will be formatted by Dropwizard Metrics using
      * {@link String#format(String, Object...)}.
      *
@@ -85,9 +88,9 @@ public class ClientPollerHealthChecks {
      * @param severity        the severity of the result
      * @param messageTemplate the message or message template
      * @param args            arguments for the messageTemplate
-     * @return the unhealthy {@link com.codahale.metrics.health.HealthCheck.Result}
+     * @return the unhealthy {@link Result}
      */
-    public static HealthCheck.Result unhealthy(ClientPollerStatistics statistics, HealthStatus severity, String messageTemplate, Object... args) {
+    public static Result unhealthy(ClientPollerStatistics statistics, HealthStatus severity, String messageTemplate, Object... args) {
         return newUnhealthyResultBuilder(severity)
                 .withMessage(messageTemplate, args)
                 .withDetail(FAILURE_DETAILS_KEY, statistics.recentFailureDetails().collect(toUnmodifiableList()))

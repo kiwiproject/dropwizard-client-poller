@@ -16,6 +16,9 @@ import java.net.URI;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 
+/**
+ * Health check that monitors and alerts if the average polling latency grows beyond an acceptable threshold
+ */
 @Slf4j
 public class ClientPollerLatencyBasedHealthCheck extends HealthCheck {
 
