@@ -34,6 +34,7 @@
         <jackson.version>2.10.5</jackson.version>
         <jersey.version>2.32</jersey.version>
         <kiwi.version>0.13.0</kiwi.version>
+        <metrics-health-severity.version>0.10.1</metrics-health-severity.version>
         <metrics-servlets.version>4.1.14</metrics-servlets.version>
 
         <!-- Versions for provided dependencies -->
@@ -41,6 +42,7 @@
         <!-- Versions for optional dependencies -->
 
         <!-- Versions for test dependencies -->
+        <kiwi-test.version>0.8.0</kiwi-test.version>
 
         <!-- Versions for plugins -->
 
@@ -143,6 +145,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.kiwiproject</groupId>
+            <artifactId>metrics-healthchecks-severity</artifactId>
+            <version>${metrics-health-severity.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-servlets</artifactId>
             <version>${metrics-servlets.version}</version>
@@ -159,7 +167,13 @@
 
         <!-- optional dependencies -->
 
-        <!-- test dependendcies -->
+        <!-- test dependencies -->
+        <dependency>
+            <groupId>org.kiwiproject</groupId>
+            <artifactId>kiwi-test</artifactId>
+            <version>${kiwi-test.version}</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
