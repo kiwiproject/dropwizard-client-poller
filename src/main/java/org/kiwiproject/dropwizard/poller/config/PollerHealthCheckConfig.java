@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Specifies configuration properties for the various poller health checks. Some configuration properties apply
- * to only on specific health check.
+ * to only one specific health check.
  */
 @Value
 public class PollerHealthCheckConfig {
