@@ -2,3 +2,4 @@
 dummyValue: "Minimal Config"
 healthCheckConfig:
   missingPollMultiplier: 12
+  
