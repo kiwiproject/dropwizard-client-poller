@@ -1,5 +1,7 @@
 ---
 dummyValue: "Full Config"
 healthCheckConfig:
+  timeWindow: 10 minutes
+  failedPollsThresholdPercent: 3
   averageLatencyWarningThreshold: 5 seconds
   missingPollMultiplier: 15

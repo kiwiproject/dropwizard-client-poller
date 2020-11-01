@@ -1,6 +1,8 @@
 package org.kiwiproject.dropwizard.poller.config;
 
 import static org.kiwiproject.dropwizard.poller.health.ClientPollerLatencyBasedHealthCheck.DEFAULT_AVG_LATENCY_WARNING_THRESHOLD_MILLIS;
+import static org.kiwiproject.dropwizard.poller.health.ClientPollerTimeBasedHealthCheck.DEFAULT_FAILED_POLLS_UNHEALTHY_THRESHOLD_PERCENT;
+import static org.kiwiproject.dropwizard.poller.health.ClientPollerTimeBasedHealthCheck.DEFAULT_TIME_WINDOW_MINUTES;
 import static org.kiwiproject.test.validation.ValidationTestHelper.assertPropertyViolations;
 
 import io.dropwizard.Configuration;
@@ -39,6 +41,8 @@ class PollerHealthCheckConfigTest {
         @Test
         void shouldSetDefaultValues_WhenExplicitlyGivenAllNulls(SoftAssertions softly) {
             config = PollerHealthCheckConfig.builder()
+                    .timeWindow(null)
+                    .failedPollsThresholdPercent(null)
                     .averageLatencyWarningThreshold(null)
                     .missingPollMultiplier(null)
                     .build();
@@ -49,7 +53,8 @@ class PollerHealthCheckConfigTest {
     }
 
     private void assertDefaultValues(SoftAssertions softly) {
-        // NOTE: Keeping SoftAssertions here because there will be more as I add more health checks
+        softly.assertThat(config.getTimeWindow().toMinutes()).isEqualTo(15);
+        softly.assertThat(config.getFailedPollsThresholdPercent()).isEqualTo(2);
         softly.assertThat(config.getAverageLatencyWarningThreshold().toMilliseconds()).isEqualTo(DEFAULT_AVG_LATENCY_WARNING_THRESHOLD_MILLIS);
         softly.assertThat(config.getMissingPollMultiplier()).isEqualTo(10);
     }
@@ -61,6 +66,8 @@ class PollerHealthCheckConfigTest {
         void shouldDeserializeFullConfig(SoftAssertions softly) {
             config = deserializeAndExtractConfig("full-config.yml");
 
+            softly.assertThat(config.getTimeWindow().toMinutes()).isEqualTo(10);
+            softly.assertThat(config.getFailedPollsThresholdPercent()).isEqualTo(3);
             softly.assertThat(config.getAverageLatencyWarningThreshold().toSeconds()).isEqualTo(5);
             softly.assertThat(config.getMissingPollMultiplier()).isEqualTo(15);
         }
@@ -69,6 +76,8 @@ class PollerHealthCheckConfigTest {
         void shouldRespectDefaultValues(SoftAssertions softly) {
             config = deserializeAndExtractConfig("minimal-config.yml");
 
+            softly.assertThat(config.getTimeWindow().toMinutes()).isEqualTo(DEFAULT_TIME_WINDOW_MINUTES);
+            softly.assertThat(config.getFailedPollsThresholdPercent()).isEqualTo(DEFAULT_FAILED_POLLS_UNHEALTHY_THRESHOLD_PERCENT);
             softly.assertThat(config.getAverageLatencyWarningThreshold().toMilliseconds()).isEqualTo(DEFAULT_AVG_LATENCY_WARNING_THRESHOLD_MILLIS);
             softly.assertThat(config.getMissingPollMultiplier()).isEqualTo(12); // not the default, but need at least one property
         }
@@ -97,6 +106,44 @@ class PollerHealthCheckConfigTest {
 
     @Nested
     class Validation {
+
+        @ParameterizedTest
+        @CsvSource({
+                "0 minutes, false",
+                "1 minutes, true",
+                "2 minutes, true",
+                "15 minutes, true",
+                "24 hours, true",
+                "1441 minutes, false", // 24 hours, 1 minute
+                "25 hours, false"
+        })
+        void shouldValidate_timeWindow(String durationString, boolean isValid) {
+            config = PollerHealthCheckConfig.builder()
+                    .timeWindow(Duration.parse(durationString))
+                    .build();
+
+            int numExpectedViolations = numExpectedViolations(isValid);
+
+            assertPropertyViolations(config, "timeWindow", numExpectedViolations);
+        }
+
+        @ParameterizedTest
+        @CsvSource({
+                "0, false",
+                "1, true",
+                "50, true",
+                "99, true",
+                "100, false"
+        })
+        void shouldValidate_failedPollsThresholdPercent(int percent, boolean isValid) {
+            config = PollerHealthCheckConfig.builder()
+                    .failedPollsThresholdPercent(percent)
+                    .build();
+
+            int numExpectedViolations = numExpectedViolations(isValid);
+
+            assertPropertyViolations(config, "failedPollsThresholdPercent", numExpectedViolations);
+        }
 
         @ParameterizedTest
         @CsvSource({
