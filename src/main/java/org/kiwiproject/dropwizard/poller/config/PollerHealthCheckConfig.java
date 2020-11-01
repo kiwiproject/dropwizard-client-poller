@@ -2,6 +2,8 @@ package org.kiwiproject.dropwizard.poller.config;
 
 import static java.util.Objects.isNull;
 import static org.kiwiproject.dropwizard.poller.health.ClientPollerLatencyBasedHealthCheck.DEFAULT_AVG_LATENCY_WARNING_THRESHOLD_MILLIS;
+import static org.kiwiproject.dropwizard.poller.health.ClientPollerTimeBasedHealthCheck.DEFAULT_FAILED_POLLS_UNHEALTHY_THRESHOLD_PERCENT;
+import static org.kiwiproject.dropwizard.poller.health.ClientPollerTimeBasedHealthCheck.DEFAULT_TIME_WINDOW_MINUTES;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,6 +14,7 @@ import lombok.Builder;
 import lombok.Value;
 import org.kiwiproject.dropwizard.poller.health.ClientPollerLatencyBasedHealthCheck;
 import org.kiwiproject.dropwizard.poller.health.ClientPollerMissedPollHealthCheck;
+import org.kiwiproject.dropwizard.poller.health.ClientPollerTimeBasedHealthCheck;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -23,6 +26,29 @@ import java.util.concurrent.TimeUnit;
  */
 @Value
 public class PollerHealthCheckConfig {
+
+    /**
+     * The time window the health checks should consider when checking health. Required.
+     * <p>
+     * Default: {@link ClientPollerTimeBasedHealthCheck#DEFAULT_TIME_WINDOW_MINUTES} minutes.
+     *
+     * @see ClientPollerTimeBasedHealthCheck
+     */
+    @MinDuration(value = 1, unit = TimeUnit.MINUTES)
+    @MaxDuration(value = 24, unit = TimeUnit.HOURS)
+    Duration timeWindow;
+
+    /**
+     * The percent (as a whole number) of attempted pools above which the time-based health check will report as
+     * unhealthy. Required.
+     * <p>
+     * Default: {@link ClientPollerTimeBasedHealthCheck#DEFAULT_FAILED_POLLS_UNHEALTHY_THRESHOLD_PERCENT}
+     *
+     * @see ClientPollerTimeBasedHealthCheck
+     */
+    @Min(1)
+    @Max(99)
+    Integer failedPollsThresholdPercent;
 
     /**
      * The average latency for polls above which the latency-based health check will report as unhealthy. Required.
@@ -52,8 +78,14 @@ public class PollerHealthCheckConfig {
 
     @JsonCreator
     @Builder
-    private PollerHealthCheckConfig(@JsonProperty("averageLatencyWarningThreshold") Duration averageLatencyWarningThreshold,
+    private PollerHealthCheckConfig(@JsonProperty("timeWindow") Duration timeWindow,
+                                    @JsonProperty("failedPollsThresholdPercent") Integer failedPollsThresholdPercent,
+                                    @JsonProperty("averageLatencyWarningThreshold") Duration averageLatencyWarningThreshold,
                                     @JsonProperty("missingPollMultiplier") Integer missingPollMultiplier) {
+
+        this.timeWindow = isNull(timeWindow) ? Duration.minutes(DEFAULT_TIME_WINDOW_MINUTES) : timeWindow;
+
+        this.failedPollsThresholdPercent = isNull(failedPollsThresholdPercent) ? DEFAULT_FAILED_POLLS_UNHEALTHY_THRESHOLD_PERCENT : failedPollsThresholdPercent;
 
         this.averageLatencyWarningThreshold = isNull(averageLatencyWarningThreshold) ?
                 Duration.milliseconds(DEFAULT_AVG_LATENCY_WARNING_THRESHOLD_MILLIS) : averageLatencyWarningThreshold;
