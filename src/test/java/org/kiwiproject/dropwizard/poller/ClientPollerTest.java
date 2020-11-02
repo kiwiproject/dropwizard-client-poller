@@ -21,6 +21,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.codahale.metrics.health.HealthCheckRegistry;
+import io.dropwizard.setup.Environment;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
@@ -32,6 +34,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.kiwiproject.dropwizard.poller.config.PollerHealthCheckConfig;
+import org.kiwiproject.dropwizard.poller.health.ClientPollerLatencyBasedHealthCheck;
+import org.kiwiproject.dropwizard.poller.health.ClientPollerMissedPollHealthCheck;
+import org.kiwiproject.dropwizard.poller.health.ClientPollerTimeBasedHealthCheck;
 import org.kiwiproject.dropwizard.poller.metrics.ClientPollerStatistics;
 import org.kiwiproject.dropwizard.poller.metrics.DefaultClientPollerStatistics;
 
@@ -551,6 +557,43 @@ class ClientPollerTest {
                         .describedAs("should not be polling after stop is called")
                         .isFalse();
             }
+        }
+
+        @Test
+        void testRegisterHealthChecks_UsingFluentApiMethod_AndRegisterHealthChecks() {
+            var env = mock(Environment.class);
+            var registry = new HealthCheckRegistry();
+
+            when(env.healthChecks()).thenReturn(registry);
+
+            var pollerWithHealthChecks = poller.andRegisterHealthChecks(env);
+
+            assertThat(pollerWithHealthChecks).isSameAs(poller);
+
+            assertThat(registry.getNames()).contains(
+                    ClientPollerTimeBasedHealthCheck.nameFor(poller.getName()),
+                    ClientPollerLatencyBasedHealthCheck.nameFor(poller.getName()),
+                    ClientPollerMissedPollHealthCheck.nameFor(poller.getName())
+            );
+        }
+
+        @Test
+        void testRegisterHealthChecks_UsingFluentApiMethod_AndRegisterHealthChecks_WithHealthCheckConfig() {
+            var env = mock(Environment.class);
+            var registry = new HealthCheckRegistry();
+
+            when(env.healthChecks()).thenReturn(registry);
+
+            var healthCheckConfig = PollerHealthCheckConfig.builder().build();
+            var pollerWithHealthChecks = poller.andRegisterHealthChecks(env, healthCheckConfig);
+
+            assertThat(pollerWithHealthChecks).isSameAs(poller);
+
+            assertThat(registry.getNames()).contains(
+                    ClientPollerTimeBasedHealthCheck.nameFor(poller.getName()),
+                    ClientPollerLatencyBasedHealthCheck.nameFor(poller.getName()),
+                    ClientPollerMissedPollHealthCheck.nameFor(poller.getName())
+            );
         }
 
         @Test

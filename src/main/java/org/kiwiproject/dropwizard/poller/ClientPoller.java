@@ -17,6 +17,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
+import org.kiwiproject.dropwizard.poller.config.PollerHealthCheckConfig;
+import org.kiwiproject.dropwizard.poller.health.ClientPollerHealthChecks;
 import org.kiwiproject.dropwizard.poller.metrics.ClientPollerStatistics;
 import org.kiwiproject.dropwizard.poller.metrics.DefaultClientPollerStatistics;
 
@@ -193,35 +195,35 @@ public class ClientPoller {
      *
      * @see ClientPollerHealthChecks#registerPollerHealthChecks(ClientPoller, Environment)
      */
-//    public ClientPoller registerHealthChecks(Environment environment) {
-//        return registerHealthChecks(environment, PollerHealthCheckConfig.builder().build());
-//    }
+    public ClientPoller registerHealthChecks(Environment environment) {
+        return registerHealthChecks(environment, PollerHealthCheckConfig.builder().build());
+    }
 
     /**
      * Registers client poller health checks on this poller using the given {@link PollerHealthCheckConfig}.
      *
      * @see ClientPollerHealthChecks#registerPollerHealthChecks(ClientPoller, Environment)
      */
-//    public ClientPoller registerHealthChecks(Environment environment, PollerHealthCheckConfig healthCheckConfig) {
-//        ClientPollerHealthChecks.registerPollerHealthChecks(this, environment, healthCheckConfig);
-//        return this;
-//    }
+    public ClientPoller registerHealthChecks(Environment environment, PollerHealthCheckConfig healthCheckConfig) {
+        ClientPollerHealthChecks.registerPollerHealthChecks(this, environment, healthCheckConfig);
+        return this;
+    }
 
     /**
      * Named specifically to be used as part of the fluent builder API, e.g.
      * {@code poller = ClientPoller.builder()...build().andRegisterHealthChecks(env);}
      */
-//    public ClientPoller andRegisterHealthChecks(Environment environment) {
-//        return registerHealthChecks(environment);
-//    }
+    public ClientPoller andRegisterHealthChecks(Environment environment) {
+        return registerHealthChecks(environment);
+    }
 
     /**
      * Named specifically to be used as part of the fluent builder API, e.g.
      * {@code poller = ClientPoller.builder()...build().andRegisterHealthChecks(env, healthConfig);}
      */
-//    public ClientPoller andRegisterHealthChecks(Environment environment, PollerHealthCheckConfig healthCheckConfig) {
-//        return registerHealthChecks(environment, healthCheckConfig);
-//    }
+    public ClientPoller andRegisterHealthChecks(Environment environment, PollerHealthCheckConfig healthCheckConfig) {
+        return registerHealthChecks(environment, healthCheckConfig);
+    }
 
     /**
      * Starts the poller with default delay type of FIXED_DELAY
@@ -323,7 +325,12 @@ public class ClientPoller {
         try {
             SyncInvoker invoker = supplier.get();
             updateUri(invoker);
-            return withMaxTimeout(doAsync(() -> invoker.get()), supplierTimeout, supplierTimeoutUnit).get();
+
+            Supplier<Response> asyncSupplier = () -> invoker.get();
+            var asyncFuture = doAsync(asyncSupplier);
+            var requestFuture = withMaxTimeout(asyncFuture, supplierTimeout, supplierTimeoutUnit);
+
+            return requestFuture.get();
         } catch (final Exception e) {
             statistics().incrementFailureCount(e);
             LOG.error("{} - Poller HTTP GET request failed. URI: {}", name, uriOrDefault());
