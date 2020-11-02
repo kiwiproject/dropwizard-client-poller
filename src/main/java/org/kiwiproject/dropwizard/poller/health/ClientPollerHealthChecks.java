@@ -1,6 +1,5 @@
 package org.kiwiproject.dropwizard.poller.health;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static java.util.stream.Collectors.toUnmodifiableList;
 import static org.kiwiproject.base.KiwiStrings.format;
 import static org.kiwiproject.metrics.health.HealthCheckResults.newUnhealthyResultBuilder;
@@ -112,9 +111,10 @@ public class ClientPollerHealthChecks {
      *
      * @param poller      The poller being monitored
      * @param environment The dropwizard environment
+     * @return a list of health checks that were registered
      */
-    public static void registerPollerHealthChecks(ClientPoller poller, Environment environment) {
-        registerPollerHealthChecks(poller, environment, PollerHealthCheckConfig.builder().build());
+    public static List<PollerHealthCheck> registerPollerHealthChecks(ClientPoller poller, Environment environment) {
+        return registerPollerHealthChecks(poller, environment, PollerHealthCheckConfig.builder().build());
     }
 
     /**
@@ -125,28 +125,20 @@ public class ClientPollerHealthChecks {
      * @param poller            The poller being monitored
      * @param environment       The dropwizard environment
      * @param healthCheckConfig The config for the health checks
+     * @return a list of health checks that were registered
      */
-    public static void registerPollerHealthChecks(ClientPoller poller,
+    public static List<PollerHealthCheck> registerPollerHealthChecks(ClientPoller poller,
                                                   Environment environment,
                                                   PollerHealthCheckConfig healthCheckConfig) {
 
         var pollerHealthChecks = buildPollerHealthChecks(poller, healthCheckConfig);
         pollerHealthChecks.forEach(healthCheck -> registerPollerHealthCheck(healthCheck, environment));
+
+        return pollerHealthChecks;
     }
 
     private static void registerPollerHealthCheck(PollerHealthCheck pollerHealthCheck, Environment environment) {
         environment.healthChecks().register(pollerHealthCheck.getName(), pollerHealthCheck.getHealthCheck());
-    }
-
-    /**
-     * Build the standard client poller health checks, returning a list containing the actual health checks wrapped in a
-     * {@link PollerHealthCheck}. Uses a default {@link PollerHealthCheckConfig}.
-     *
-     * @param poller The poller being monitored
-     * @return a list of health checks for the poller
-     */
-    public static List<PollerHealthCheck> buildPollerHealthChecks(ClientPoller poller) {
-        return buildPollerHealthChecks(poller, PollerHealthCheckConfig.builder().build());
     }
 
     /**
@@ -157,12 +149,12 @@ public class ClientPollerHealthChecks {
      * @param healthCheckConfig The config for the health checks
      * @return a list of health checks for the poller
      */
-    public static List<PollerHealthCheck> buildPollerHealthChecks(ClientPoller poller, PollerHealthCheckConfig healthCheckConfig) {
+    private static List<PollerHealthCheck> buildPollerHealthChecks(ClientPoller poller, PollerHealthCheckConfig healthCheckConfig) {
         var timeBasedHealthCheck = ClientPollerTimeBasedHealthCheck.of(poller, healthCheckConfig);
         var latencyBasedHealthCheck = ClientPollerLatencyBasedHealthCheck.of(poller, healthCheckConfig);
         var missedPollHealthCheck = ClientPollerMissedPollHealthCheck.of(poller, healthCheckConfig);
 
-        return newArrayList(
+        return List.of(
                 new PollerHealthCheck(ClientPollerTimeBasedHealthCheck.nameFor(poller.getName()), timeBasedHealthCheck),
                 new PollerHealthCheck(ClientPollerLatencyBasedHealthCheck.nameFor(poller.getName()), latencyBasedHealthCheck),
                 new PollerHealthCheck(ClientPollerMissedPollHealthCheck.nameFor(poller.getName()), missedPollHealthCheck)
