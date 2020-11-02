@@ -97,7 +97,10 @@ public class ClientPollerHealthChecks {
      * @param args            arguments for the messageTemplate
      * @return the unhealthy {@link Result}
      */
-    public static Result unhealthy(ClientPollerStatistics statistics, HealthStatus severity, String messageTemplate, Object... args) {
+    public static Result unhealthy(ClientPollerStatistics statistics,
+                                   HealthStatus severity,
+                                   String messageTemplate,
+                                   Object... args) {
         return newUnhealthyResultBuilder(severity)
                 .withMessage(messageTemplate, args)
                 .withDetail(FAILURE_DETAILS_KEY, statistics.recentFailureDetails().collect(toUnmodifiableList()))
@@ -128,8 +131,8 @@ public class ClientPollerHealthChecks {
      * @return a list of health checks that were registered
      */
     public static List<PollerHealthCheck> registerPollerHealthChecks(ClientPoller poller,
-                                                  Environment environment,
-                                                  PollerHealthCheckConfig healthCheckConfig) {
+                                                                     Environment environment,
+                                                                     PollerHealthCheckConfig healthCheckConfig) {
 
         var pollerHealthChecks = buildPollerHealthChecks(poller, healthCheckConfig);
         pollerHealthChecks.forEach(healthCheck -> registerPollerHealthCheck(healthCheck, environment));
@@ -149,7 +152,8 @@ public class ClientPollerHealthChecks {
      * @param healthCheckConfig The config for the health checks
      * @return a list of health checks for the poller
      */
-    private static List<PollerHealthCheck> buildPollerHealthChecks(ClientPoller poller, PollerHealthCheckConfig healthCheckConfig) {
+    private static List<PollerHealthCheck> buildPollerHealthChecks(ClientPoller poller,
+                                                                   PollerHealthCheckConfig healthCheckConfig) {
         var timeBasedHealthCheck = ClientPollerTimeBasedHealthCheck.of(poller, healthCheckConfig);
         var latencyBasedHealthCheck = ClientPollerLatencyBasedHealthCheck.of(poller, healthCheckConfig);
         var missedPollHealthCheck = ClientPollerMissedPollHealthCheck.of(poller, healthCheckConfig);
