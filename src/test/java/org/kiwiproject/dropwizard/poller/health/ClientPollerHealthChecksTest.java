@@ -3,10 +3,19 @@ package org.kiwiproject.dropwizard.poller.health;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.kiwiproject.base.KiwiStrings.f;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import com.codahale.metrics.health.HealthCheckRegistry;
+import io.dropwizard.setup.Environment;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.kiwiproject.dropwizard.poller.ClientPoller;
+import org.kiwiproject.dropwizard.poller.metrics.ClientPollerStatistics;
 import org.kiwiproject.dropwizard.poller.metrics.DefaultClientPollerStatistics;
 
 import java.net.URI;
@@ -72,6 +81,30 @@ class ClientPollerHealthChecksTest {
             assertThat(failedResult.getMessage()).isEqualTo("testMessage foo 42");
             assertThat(failedResult.getDetails()).containsEntry(ClientPollerHealthChecks.FAILURE_DETAILS_KEY, failureDetails);
             assertThat(failedResult.getDetails()).containsEntry("severity", "WARN");
+        }
+    }
+
+    @Nested
+    class Register {
+
+        @Test
+        void shouldRegisterAllHealthChecksForPoller() {
+            var statistics = ClientPollerStatistics.newClientPollerStatisticsOfDefaultType();
+            var pollerName = "Test Poller";
+            var poller = ClientPoller.builder().name(pollerName).statistics(statistics).build();
+
+            var env = mock(Environment.class);
+            var registry = mock(HealthCheckRegistry.class);
+            when(env.healthChecks()).thenReturn(registry);
+
+            ClientPollerHealthChecks.registerPollerHealthChecks(poller, env);
+
+            verify(registry).register(eq(ClientPollerTimeBasedHealthCheck.nameFor(pollerName)),
+                    isA(ClientPollerTimeBasedHealthCheck.class));
+            verify(registry).register(eq(ClientPollerLatencyBasedHealthCheck.nameFor(pollerName)),
+                    isA(ClientPollerLatencyBasedHealthCheck.class));
+            verify(registry).register(eq(ClientPollerMissedPollHealthCheck.nameFor(pollerName)),
+                    isA(ClientPollerMissedPollHealthCheck.class));
         }
     }
 }
