@@ -199,12 +199,13 @@ public class ClientPollerTimeBasedHealthCheck extends HealthCheck {
      * Create a new {@link ClientPollerMissedPollHealthCheck} for the given poll interval/units, with the given
      * {@link ClientPollerStatistics}, with the given time window/units, and the given {@link KiwiEnvironment}.
      *
-     * @param pollInterval     The poll interval that the health check is monitoring
-     * @param pollIntervalUnit The units for the poll interval
-     * @param statistics       The statistics being used for monitoring
-     * @param timeWindowAmount The time window to monitor
-     * @param timeWindowUnit   The units for the time window
-     * @param kiwiEnv          The kiwi environment
+     * @param pollInterval                         The poll interval that the health check is monitoring
+     * @param pollIntervalUnit                     The units for the poll interval
+     * @param failedPollsUnhealthyThresholdPercent The percent threshold for failed polls
+     * @param statistics                           The statistics being used for monitoring
+     * @param timeWindowAmount                     The time window to monitor
+     * @param timeWindowUnit                       The units for the time window
+     * @param kiwiEnv                              The kiwi environment
      * @return a new instance of this health check
      */
     public static ClientPollerTimeBasedHealthCheck of(long pollInterval,

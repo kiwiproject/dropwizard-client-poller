@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 /**
  * The default implementation of {@link ClientPollerStatistics}.
  * <p>
- * This implementation is <em>effectively thread-safe<em> if each {@link ClientPoller} is using its own
+ * This implementation is <em>effectively thread-safe</em> if each {@link ClientPoller} is using its own
  * {@link ClientPollerStatistics} instance. This is true because a poller instance is scheduled to execute at a
  * fixed-rate and so it sleeps, executes, sleeps, executes, etc. Thus there is only <em>one</em> poller instance acting
  * on its {@link ClientPollerStatistics} instance at any given time.

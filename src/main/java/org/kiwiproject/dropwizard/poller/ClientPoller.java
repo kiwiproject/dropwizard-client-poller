@@ -193,6 +193,8 @@ public class ClientPoller {
     /**
      * Registers client poller health checks on this poller.
      *
+     * @param environment the Dropwizard environment
+     * @return this poller
      * @see ClientPollerHealthChecks#registerPollerHealthChecks(ClientPoller, Environment)
      */
     public ClientPoller registerHealthChecks(Environment environment) {
@@ -202,6 +204,9 @@ public class ClientPoller {
     /**
      * Registers client poller health checks on this poller using the given {@link PollerHealthCheckConfig}.
      *
+     * @param environment       the Dropwizard environment
+     * @param healthCheckConfig the configuration for health checks
+     * @return this poller
      * @see ClientPollerHealthChecks#registerPollerHealthChecks(ClientPoller, Environment)
      */
     public ClientPoller registerHealthChecks(Environment environment, PollerHealthCheckConfig healthCheckConfig) {
@@ -212,6 +217,9 @@ public class ClientPoller {
     /**
      * Named specifically to be used as part of the fluent builder API, e.g.
      * {@code poller = ClientPoller.builder()...build().andRegisterHealthChecks(env);}
+     *
+     * @param environment the Dropwizard environment
+     * @return this poller
      */
     public ClientPoller andRegisterHealthChecks(Environment environment) {
         return registerHealthChecks(environment);
@@ -220,6 +228,10 @@ public class ClientPoller {
     /**
      * Named specifically to be used as part of the fluent builder API, e.g.
      * {@code poller = ClientPoller.builder()...build().andRegisterHealthChecks(env, healthConfig);}
+     *
+     * @param environment       the Dropwizard environment
+     * @param healthCheckConfig the configuration for health checks
+     * @return this poller
      */
     public ClientPoller andRegisterHealthChecks(Environment environment, PollerHealthCheckConfig healthCheckConfig) {
         return registerHealthChecks(environment, healthCheckConfig);
@@ -403,13 +415,17 @@ public class ClientPoller {
 
     /**
      * Returns the {@link ClientPollerStatistics} instance that is collecting stats for this poller.
+     *
+     * @return the statistics used for collecting stats for this poller
      */
     public ClientPollerStatistics statistics() {
         return statistics;
     }
 
     /**
-     * Return {@code true} if this poller is asynchronous, otherwise {@code false).
+     * Return {@code true} if this poller is asynchronous, otherwise {@code false}.
+     *
+     * @return {@code true} if this poller is asynchronous, otherwise {@code false}
      */
     public boolean isAsync() {
         return consumerType.isAsync();
@@ -418,6 +434,8 @@ public class ClientPoller {
     /**
      * Return {@code true} if this poller is currently polling, or {@code false} if it has not been started yet
      * or if it has been stopped.
+     *
+     * @return true if the poller is currently polling; false otherwise
      */
     public boolean isPolling() {
         return polling.get();
