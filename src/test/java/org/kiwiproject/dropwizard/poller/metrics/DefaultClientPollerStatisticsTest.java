@@ -78,7 +78,7 @@ class DefaultClientPollerStatisticsTest {
 
     private void justOccurred(long timeInMillis, SoftAssertions softly) {
         long now = System.currentTimeMillis();
-        softly.assertThat(timeInMillis).isLessThan(now);
+        softly.assertThat(timeInMillis).isLessThanOrEqualTo(now);
         softly.assertThat(timeInMillis).isGreaterThan(now - TimeUnit.SECONDS.toMillis(1));
     }
 
