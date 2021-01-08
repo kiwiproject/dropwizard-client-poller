@@ -33,7 +33,7 @@
         <jackson.version>2.10.5</jackson.version>
         <jersey.version>2.32</jersey.version>
         <kiwi.version>0.18.0</kiwi.version>
-        <metrics-healthchecks-severity.version>0.14.0</metrics-healthchecks-severity.version>
+        <metrics-healthchecks-severity.version>0.15.0</metrics-healthchecks-severity.version>
         <metrics-jetty9>4.1.16</metrics-jetty9>
         <metrics-servlets.version>4.1.16</metrics-servlets.version>
 
