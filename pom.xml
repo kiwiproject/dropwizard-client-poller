@@ -28,21 +28,24 @@
 
     <properties>
         <!-- Versions for required dependencies -->
-        <dropwizard.version>2.0.16</dropwizard.version>
-        <hibernate-validator.version>6.1.6.Final</hibernate-validator.version>
-        <jackson.version>2.10.5</jackson.version>
-        <jersey.version>2.32</jersey.version>
-        <kiwi.version>0.18.0</kiwi.version>
-        <metrics-healthchecks-severity.version>0.15.0</metrics-healthchecks-severity.version>
-        <metrics-jetty9>4.1.16</metrics-jetty9>
-        <metrics-servlets.version>4.1.16</metrics-servlets.version>
+        <dropwizard.version>2.0.19</dropwizard.version>
+        <hibernate-validator.version>6.1.7.Final</hibernate-validator.version>
+        <httpclient.version>4.5.13</httpclient.version>
+        <jackson.version>[2.10.5,2.10.6)</jackson.version>
+        <jaxb-api.version>2.3.1</jaxb-api.version>
+        <jersey.version>2.33</jersey.version>
+        <kiwi.version>0.19.0</kiwi.version>
+        <metrics-healthchecks-severity.version>0.16.0</metrics-healthchecks-severity.version>
+        <metrics-jersey2>4.1.17</metrics-jersey2>
+        <metrics-jetty9>4.1.17</metrics-jetty9>
+        <metrics-servlets.version>4.1.17</metrics-servlets.version>
 
         <!-- Versions for provided dependencies -->
 
         <!-- Versions for optional dependencies -->
 
         <!-- Versions for test dependencies -->
-        <kiwi-test.version>0.13.0</kiwi-test.version>
+        <kiwi-test.version>0.14.0</kiwi-test.version>
 
         <!-- Versions for plugins -->
 
@@ -76,6 +79,10 @@
                     <groupId>org.hibernate.validator</groupId>
                     <artifactId>hibernate-validator</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -92,6 +99,24 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpcore</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-joda</artifactId>
             <version>${jackson.version}</version>
@@ -99,6 +124,10 @@
                 <exclusion>
                     <groupId>joda-time</groupId>
                     <artifactId>joda-time</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -108,6 +137,10 @@
             <artifactId>jackson-jaxrs-json-provider</artifactId>
             <version>${jackson.version}</version>
             <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
                 <exclusion>
                     <groupId>jakarta.activation</groupId>
                     <artifactId>jakarta.activation-api</artifactId>
@@ -157,6 +190,18 @@
 
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-jersey2</artifactId>
+            <version>${metrics-jersey2}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.glassfish.jersey.core</groupId>
+                    <artifactId>jersey-server</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-jetty9</artifactId>
             <version>${metrics-jetty9}</version>
             <exclusions>
@@ -185,6 +230,13 @@
         <!-- optional dependencies -->
 
         <!-- test dependencies -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>${jaxb-api.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.kiwiproject</groupId>
             <artifactId>kiwi-test</artifactId>
