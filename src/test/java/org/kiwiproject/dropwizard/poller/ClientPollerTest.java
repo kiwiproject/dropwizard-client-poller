@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.AdditionalAnswers.answersWithDelay;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doThrow;
@@ -623,7 +622,7 @@ class ClientPollerTest {
 
             startPollerAndStopOnceReceiveEnoughRequests(1);
 
-            verify(consumer, atLeastOnce()).accept(eq(response));
+            verify(consumer, atLeastOnce()).accept(response);
 
             softly.assertThat(poller.statistics().successCount()).isGreaterThanOrEqualTo(1);
             softly.assertThat(poller.statistics().failureCount()).isZero();
@@ -639,7 +638,7 @@ class ClientPollerTest {
 
             startPollerAndStopOnceReceiveEnoughRequests(syncPoller, numberOfIntervals);
 
-            verify(consumer, atLeast(numberOfIntervals)).accept(eq(response));
+            verify(consumer, atLeast(numberOfIntervals)).accept(response);
 
             softly.assertThat(syncPoller.statistics().successCount()).isGreaterThanOrEqualTo(numberOfIntervals);
             softly.assertThat(syncPoller.statistics().skipCount()).isZero();
@@ -656,7 +655,7 @@ class ClientPollerTest {
 
             startPollerAndStopOnceReceiveEnoughRequests(syncPoller, ClientPoller.DelayType.FIXED_RATE, numberOfIntervals);
 
-            verify(consumer, atLeast(numberOfIntervals)).accept(eq(response));
+            verify(consumer, atLeast(numberOfIntervals)).accept(response);
 
             softly.assertThat(syncPoller.statistics().successCount()).isGreaterThanOrEqualTo(numberOfIntervals);
             softly.assertThat(syncPoller.statistics().skipCount()).isZero();
@@ -671,7 +670,7 @@ class ClientPollerTest {
 
             startPollerAndStopOnceReceiveEnoughRequests(numberOfIntervals);
 
-            verify(consumer, atLeast(numberOfIntervals)).accept(eq(response));
+            verify(consumer, atLeast(numberOfIntervals)).accept(response);
 
             softly.assertThat(poller.statistics().successCount()).isGreaterThanOrEqualTo(numberOfIntervals);
             softly.assertThat(poller.statistics().skipCount()).isZero();
@@ -694,7 +693,7 @@ class ClientPollerTest {
         void testPollSync_ShouldNeverExecutePoll_WhenDecisionFunctionReturnsFalse(SoftAssertions softly) {
             when(invoker.get()).thenReturn(response);
 
-            final int numberOfIntervals = 4;
+            final int numberOfIntervals = 6;
 
             var count = new AtomicInteger();
 
