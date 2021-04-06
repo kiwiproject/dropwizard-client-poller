@@ -613,7 +613,7 @@ class ClientPollerTest {
         void testCannotStart_WithoutIntervalType() {
             assertThatThrownBy(() -> poller.start(null))
                     .isExactlyInstanceOf(IllegalStateException.class)
-                    .hasMessage("intervalType must be specified to start polling");
+                    .hasMessage("delayType must be specified to start polling");
         }
 
         @Test
