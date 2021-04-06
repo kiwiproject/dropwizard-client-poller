@@ -81,7 +81,16 @@ public class ClientPoller {
      * @see ScheduledExecutorService#scheduleWithFixedDelay(Runnable, long, long, TimeUnit)
      */
     public enum DelayType {
-        FIXED_RATE, FIXED_DELAY
+
+        /**
+         * Corresponds to {@link ScheduledExecutorService#scheduleAtFixedRate(Runnable, long, long, TimeUnit)}
+         */
+        FIXED_RATE,
+
+        /**
+         * Corresponds to {@link ScheduledExecutorService#scheduleWithFixedDelay(Runnable, long, long, TimeUnit)}
+         */
+        FIXED_DELAY
     }
 
     /**
@@ -238,17 +247,26 @@ public class ClientPoller {
     }
 
     /**
-     * Starts the poller with default delay type of FIXED_DELAY
+     * Starts the poller with default delay type of FIXED_DELAY.
+     *
+     * @throws IllegalStateException if any required properties are not set
+     * @see DelayType#FIXED_DELAY
      */
     public void start() {
         start(DelayType.FIXED_DELAY);
     }
 
-    public void start(DelayType intervalType) {
+    /**
+     * Starts the poller with the given type of delay.
+     *
+     * @param delayType the type of delay (see {@link DelayType} for type descriptions)
+     * @throws IllegalStateException if any required properties are not set
+     */
+    public void start(DelayType delayType) {
         initializeExecutorIfNull();
         validateInternalState();
-        checkState(nonNull(intervalType), "intervalType must be specified to start polling");
-        scheduleExecution(intervalType);
+        checkState(nonNull(delayType), "delayType must be specified to start polling");
+        scheduleExecution(delayType);
         polling.set(true);
     }
 
@@ -273,6 +291,8 @@ public class ClientPoller {
      * the {@link IllegalStateException} that is thrown here. It seems throwing an {@link IllegalStateException}
      * is more appropriate than NPE in this case, or at least more clear.
      */
+    // Following suppression is because some of the fields CAN be null if explicitly nullified when building a poller
+    @SuppressWarnings("ConstantConditions")
     private void validateInternalState() {
         checkState(nonNull(supplier), "supplier cannot be null");
         checkState(nonNull(consumerType), "consumerType cannot be null");
@@ -331,19 +351,19 @@ public class ClientPoller {
         LOG.trace("{} - Poll time: {} millis", name, elapsed);
     }
 
-    @SuppressWarnings({"java:S1612", "Convert2MethodRef"})
     private Response executePollRequest() {
         statistics().incrementCount();
         try {
             SyncInvoker invoker = supplier.get();
             updateUri(invoker);
 
-            Supplier<Response> asyncSupplier = () -> invoker.get();
-            var asyncFuture = doAsync(asyncSupplier);
+            Supplier<Response> responseSupplier = invoker::get;
+            var asyncFuture = doAsync(responseSupplier);
             var requestFuture = withMaxTimeout(asyncFuture, supplierTimeout, supplierTimeoutUnit);
 
             return requestFuture.get();
         } catch (final Exception e) {
+            interruptCurrentThreadIfInterruptedException(e);
             statistics().incrementFailureCount(e);
             LOG.error("{} - Poller HTTP GET request failed. URI: {}", name, uriOrDefault());
             LOG.info("{} - Poller failure:", name, e);
@@ -465,7 +485,14 @@ public class ClientPoller {
             var terminatedBeforeTimeout = executor.awaitTermination(timeout, timeUnit);
             logAwaitTerminationResult(name, terminatedBeforeTimeout, timeout, timeUnit);
         } catch (Exception e) {
+            interruptCurrentThreadIfInterruptedException(e);
             LOG.warn("Unable to shut down '{}'. executor", name, e);
+        }
+    }
+
+    private static void interruptCurrentThreadIfInterruptedException(Exception e) {
+        if (e instanceof InterruptedException) {
+            Thread.currentThread().interrupt();
         }
     }
 
