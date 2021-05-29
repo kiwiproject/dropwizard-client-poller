@@ -343,21 +343,21 @@ public class ClientPoller {
 
     private void executePoll() {
         LOG.trace("{} - Poller executing", name);
-        long start = System.currentTimeMillis();
-        Response response = executePollRequest();
+        var startMillis = System.currentTimeMillis();
+        var response = executePollRequest();
         handleResponse(response);
-        long elapsed = System.currentTimeMillis() - start;
-        statistics().addPollLatencyMeasurement(elapsed);
-        LOG.trace("{} - Poll time: {} millis", name, elapsed);
+        long elapsedMillis = System.currentTimeMillis() - startMillis;
+        statistics().addPollLatencyMeasurement(elapsedMillis);
+        LOG.trace("{} - Poll time: {} millis", name, elapsedMillis);
     }
 
     private Response executePollRequest() {
         statistics().incrementCount();
         try {
-            SyncInvoker invoker = supplier.get();
-            updateUri(invoker);
+            var syncInvoker = supplier.get();
+            updateUri(syncInvoker);
 
-            Supplier<Response> responseSupplier = invoker::get;
+            Supplier<Response> responseSupplier = syncInvoker::get;
             var asyncFuture = doAsync(responseSupplier);
             var requestFuture = withMaxTimeout(asyncFuture, supplierTimeout, supplierTimeoutUnit);
 
@@ -506,8 +506,8 @@ public class ClientPoller {
     }
 
     private static ExecutorService buildDefaultConsumerExecutor(ClientPollerStatistics stats) {
-        ThreadFactory factory = buildDefaultConsumerThreadFactory(stats);
-        return Executors.newCachedThreadPool(factory);
+        var threadFactory = buildDefaultConsumerThreadFactory(stats);
+        return Executors.newCachedThreadPool(threadFactory);
     }
 
     private static ThreadFactory buildDefaultConsumerThreadFactory(ClientPollerStatistics stats) {
@@ -523,7 +523,7 @@ public class ClientPoller {
     @VisibleForTesting
     static Thread.UncaughtExceptionHandler newUncaughtExceptionHandler(ClientPollerStatistics stats) {
         return (thread, error) -> {
-            String msg = format("Uncaught exception on thread {}", thread);
+            var msg = format("Uncaught exception on thread {}", thread);
             LOG.error(msg, error);
             stats.incrementFailureCount(error);
         };
