@@ -29,7 +29,7 @@
     <properties>
         <!-- Versions for required dependencies -->
         <commons-text.version>1.9</commons-text.version>
-        <dropwizard.version>2.0.22</dropwizard.version>
+        <dropwizard.version>2.0.23</dropwizard.version>
         <hibernate-validator.version>6.1.7.Final</hibernate-validator.version>
         <httpclient.version>4.5.13</httpclient.version>
         <jackson.version>[2.10.5,2.10.6)</jackson.version>
@@ -37,9 +37,9 @@
         <jersey.version>2.33</jersey.version>
         <kiwi.version>0.24.0</kiwi.version>
         <metrics-healthchecks-severity.version>0.21.0</metrics-healthchecks-severity.version>
-        <metrics-jersey2>4.1.22</metrics-jersey2>
-        <metrics-jetty9>4.1.22</metrics-jetty9>
-        <metrics-servlets.version>4.1.22</metrics-servlets.version>
+        <metrics-jersey2>4.1.23</metrics-jersey2>
+        <metrics-jetty9>4.1.23</metrics-jetty9>
+        <metrics-servlets.version>4.1.23</metrics-servlets.version>
 
         <!-- Versions for provided dependencies -->
 
@@ -100,6 +100,10 @@
                 <exclusion>
                     <groupId>com.fasterxml.jackson.core</groupId>
                     <artifactId>jackson-databind</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -238,7 +242,15 @@
             <exclusions>
                 <exclusion>
                     <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
                     <artifactId>jackson-databind</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
