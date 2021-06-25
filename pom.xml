@@ -35,7 +35,7 @@
         <jackson.version>[2.10.5,2.10.6)</jackson.version>
         <jaxb-api.version>2.3.3</jaxb-api.version>
         <jersey.version>2.33</jersey.version>
-        <kiwi.version>0.23.0</kiwi.version>
+        <kiwi.version>0.24.0</kiwi.version>
         <metrics-healthchecks-severity.version>0.20.0</metrics-healthchecks-severity.version>
         <metrics-jersey2>4.1.22</metrics-jersey2>
         <metrics-jetty9>4.1.22</metrics-jetty9>
