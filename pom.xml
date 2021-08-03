@@ -29,7 +29,7 @@
     <properties>
         <!-- Versions for required dependencies -->
         <commons-text.version>1.9</commons-text.version>
-        <dropwizard.version>2.0.23</dropwizard.version>
+        <dropwizard.version>2.0.24</dropwizard.version>
         <hibernate-validator.version>6.1.7.Final</hibernate-validator.version>
         <httpclient.version>4.5.13</httpclient.version>
         <jackson.version>[2.10.5,2.10.6)</jackson.version>
@@ -37,9 +37,9 @@
         <jersey.version>2.33</jersey.version>
         <kiwi.version>0.25.0</kiwi.version>
         <metrics-healthchecks-severity.version>0.22.0</metrics-healthchecks-severity.version>
-        <metrics-jersey2>4.1.23</metrics-jersey2>
-        <metrics-jetty9>4.1.23</metrics-jetty9>
-        <metrics-servlets.version>4.1.23</metrics-servlets.version>
+        <metrics-jersey2>4.1.25</metrics-jersey2>
+        <metrics-jetty9>4.1.25</metrics-jetty9>
+        <metrics-servlets.version>4.1.25</metrics-servlets.version>
 
         <!-- Versions for provided dependencies -->
 
@@ -85,6 +85,14 @@
             <artifactId>dropwizard-client</artifactId>
             <version>${dropwizard.version}</version>
             <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
                 <exclusion>
                     <groupId>org.apache.commons</groupId>
                     <artifactId>commons-lang3</artifactId>
