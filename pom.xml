@@ -46,7 +46,7 @@
         <!-- Versions for optional dependencies -->
 
         <!-- Versions for test dependencies -->
-        <kiwi-test.version>0.20.0</kiwi-test.version>
+        <kiwi-test.version>0.21.0</kiwi-test.version>
 
         <!-- Versions for plugins -->
 
