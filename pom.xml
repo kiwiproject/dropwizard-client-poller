@@ -33,10 +33,11 @@
         <hibernate-validator.version>6.1.7.Final</hibernate-validator.version>
         <httpclient.version>4.5.13</httpclient.version>
         <jackson.version>[2.10.5,2.10.6)</jackson.version>
+        <jakarta-el.version>3.0.4</jakarta-el.version>
         <jaxb-api.version>2.3.3</jaxb-api.version>
         <jersey.version>2.33</jersey.version>
-        <kiwi.version>0.25.0</kiwi.version>
-        <metrics-healthchecks-severity.version>0.22.0</metrics-healthchecks-severity.version>
+        <kiwi.version>1.0.0</kiwi.version>
+        <metrics-healthchecks-severity.version>1.0.0</metrics-healthchecks-severity.version>
         <metrics-jersey2>4.1.25</metrics-jersey2>
         <metrics-jetty9>4.1.25</metrics-jetty9>
         <metrics-servlets.version>4.1.25</metrics-servlets.version>
@@ -46,7 +47,7 @@
         <!-- Versions for optional dependencies -->
 
         <!-- Versions for test dependencies -->
-        <kiwi-test.version>0.21.0</kiwi-test.version>
+        <kiwi-test.version>1.0.0</kiwi-test.version>
 
         <!-- Versions for plugins -->
 
@@ -108,6 +109,10 @@
                 <exclusion>
                     <groupId>com.fasterxml.jackson.core</groupId>
                     <artifactId>jackson-databind</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.glassfish</groupId>
+                    <artifactId>jakarta.el</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -180,6 +185,13 @@
                     <artifactId>jakarta.xml.bind-api</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>jakarta.el</artifactId>
+            <version>${jakarta-el.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
