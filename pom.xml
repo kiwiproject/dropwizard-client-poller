@@ -29,7 +29,7 @@
     <properties>
         <!-- Versions for required dependencies -->
         <commons-text.version>1.9</commons-text.version>
-        <dropwizard.version>2.0.25</dropwizard.version>
+        <dropwizard.version>2.0.26</dropwizard.version>
         <hibernate-validator.version>6.1.7.Final</hibernate-validator.version>
         <httpclient.version>4.5.13</httpclient.version>
         <jackson.version>[2.10.5,2.10.6)</jackson.version>
