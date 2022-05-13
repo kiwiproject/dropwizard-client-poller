@@ -262,7 +262,6 @@ class ClientPollerTimeBasedHealthCheckTest {
 
             when(statistics.lastFailureTimeInMillis()).thenReturn(Optional.of(now));
 
-            var oneAboveThreshold = 1 + maxPollFailuresAllowed;
             var recentFailureTimes = Stream.iterate(now, value -> value - 1_000).limit(numberOfFailures);
             when(statistics.recentFailureTimesInMillis()).thenReturn(recentFailureTimes);
 
