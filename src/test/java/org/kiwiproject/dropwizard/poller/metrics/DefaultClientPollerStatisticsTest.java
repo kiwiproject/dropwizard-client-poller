@@ -56,30 +56,31 @@ class DefaultClientPollerStatisticsTest {
     }
 
     @Test
-    void testIncrementCount_SetsLastAttemptTime(SoftAssertions softly) {
+    void testIncrementCount_SetsLastAttemptTime() {
         stats.incrementCount();
 
-        softly.assertThat(stats.totalCount()).isOne();
-        softly.assertThat(stats.lastAttemptTimeInMillis())
+        assertThat(stats.totalCount()).isOne();
+        assertThat(stats.lastAttemptTimeInMillis())
                 .isPresent()
-                .hasValueSatisfying(timeInMillis -> justOccurred(timeInMillis, softly));
+                .hasValueSatisfying(this::justOccurred);
     }
 
     @Test
-    void testIncrementSkipCount_SetsLastSkipTime(SoftAssertions softly) {
+    void testIncrementSkipCount_SetsLastSkipTime() {
         stats.incrementSkipCount();
 
-        softly.assertThat(stats.totalCount()).isZero();
-        softly.assertThat(stats.skipCount()).isOne();
-        softly.assertThat(stats.lastSkipTimeInMillis())
+        assertThat(stats.totalCount()).isZero();
+        assertThat(stats.skipCount()).isOne();
+        assertThat(stats.lastSkipTimeInMillis())
                 .isPresent()
-                .hasValueSatisfying(timeInMillis -> justOccurred(timeInMillis, softly));
+                .hasValueSatisfying(this::justOccurred);
     }
 
-    private void justOccurred(long timeInMillis, SoftAssertions softly) {
+    private void justOccurred(long timeInMillis) {
         long now = System.currentTimeMillis();
-        softly.assertThat(timeInMillis).isLessThanOrEqualTo(now);
-        softly.assertThat(timeInMillis).isGreaterThan(now - TimeUnit.SECONDS.toMillis(1));
+        assertThat(timeInMillis)
+                .isLessThanOrEqualTo(now)
+                .isGreaterThan(now - TimeUnit.SECONDS.toMillis(1));
     }
 
     @Test
@@ -160,9 +161,9 @@ class DefaultClientPollerStatisticsTest {
         List<Long> recentFailureTimes = stats.recentFailureTimesInMillis().collect(toList());
         Collections.reverse(recentFailureTimes);
 
-        //noinspection UnstableApiUsage
+        // noinspection UnstableApiUsage
         Streams.zip(failureDetails.stream(), recentFailureTimes.stream(),
-                (failureDetail, failureTime) -> Pair.of(failureDetail.get(DefaultClientPollerStatistics.FailedPollResult.TIME_KEY), failureTime))
+                        (failureDetail, failureTime) -> Pair.of(failureDetail.get(DefaultClientPollerStatistics.FailedPollResult.TIME_KEY), failureTime))
                 .forEach(pair ->
                         softly.assertThat(pair.getLeft())
                                 .describedAs("Failure detail time must match failure time")
