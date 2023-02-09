@@ -47,7 +47,7 @@ jobs:
         restore-keys: ${{ runner.os }}-m2
 
     - name: Delombok
-      uses: advanced-security/delombok@main
+      uses: sleberknight/delombok-action@main
 
     - name: Autobuild
       uses: github/codeql-action/autobuild@v2
