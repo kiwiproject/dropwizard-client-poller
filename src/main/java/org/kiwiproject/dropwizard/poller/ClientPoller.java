@@ -119,7 +119,7 @@ public class ClientPoller {
     private final Consumer<Response> consumer;
 
     /**
-     * How the consumer should handle responses, sync or async. <em>Default is async</em,
+     * How the consumer should handle responses, sync or async. <em>Default is async.</em>
      */
     @Builder.Default
     private final ConsumerType consumerType = ConsumerType.ASYNC;
