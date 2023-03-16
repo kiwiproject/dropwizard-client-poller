@@ -6,7 +6,7 @@
 [![CodeQL](https://github.com/kiwiproject/dropwizard-client-poller/actions/workflows/codeql.yml/badge.svg)](https://github.com/kiwiproject/dropwizard-client-poller/actions/workflows/codeql.yml)
 [![javadoc](https://javadoc.io/badge2/org.kiwiproject/dropwizard-client-poller/javadoc.svg)](https://javadoc.io/doc/org.kiwiproject/dropwizard-client-poller)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Maven Central](https://img.shields.io/maven-central/v/org.kiwiproject/dropwizard-client-poller)](https://search.maven.org/search?q=g:org.kiwiproject%20a:dropwizard-client-poller)
+[![Maven Central](https://img.shields.io/maven-central/v/org.kiwiproject/dropwizard-client-poller)](https://central.sonatype.com/artifact/org.kiwiproject/dropwizard-client-poller/1.0.11)
 
 Dropwizard Client Poller provides a simple HTTP polling capability using a Jersey Client
 and integrated with Dropwizard to provide health checks.
