@@ -8,7 +8,7 @@
         </encoder>
     </appender>
 
-    <logger name="org.kiwiproject.test" level="TRACE"/>
+    <logger name="org.kiwiproject.dropwizard.poller" level="TRACE"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
