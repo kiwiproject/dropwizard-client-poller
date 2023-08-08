@@ -21,7 +21,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.codahale.metrics.health.HealthCheckRegistry;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
+import jakarta.ws.rs.ProcessingException;
+import jakarta.ws.rs.client.SyncInvoker;
+import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
@@ -40,9 +43,6 @@ import org.kiwiproject.dropwizard.poller.health.ClientPollerTimeBasedHealthCheck
 import org.kiwiproject.dropwizard.poller.metrics.ClientPollerStatistics;
 import org.kiwiproject.dropwizard.poller.metrics.DefaultClientPollerStatistics;
 
-import javax.ws.rs.ProcessingException;
-import javax.ws.rs.client.SyncInvoker;
-import javax.ws.rs.core.Response;
 import java.time.Duration;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;

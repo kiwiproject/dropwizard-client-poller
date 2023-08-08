@@ -10,14 +10,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.util.Duration;
 import io.dropwizard.validation.MaxDuration;
 import io.dropwizard.validation.MinDuration;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Builder;
 import lombok.Value;
 import org.kiwiproject.dropwizard.poller.health.ClientPollerLatencyBasedHealthCheck;
 import org.kiwiproject.dropwizard.poller.health.ClientPollerMissedPollHealthCheck;
 import org.kiwiproject.dropwizard.poller.health.ClientPollerTimeBasedHealthCheck;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -67,7 +67,7 @@ public class PollerHealthCheckConfig {
      * <p>
      * Default: {@link ClientPollerMissedPollHealthCheck#DEFAULT_MISSING_POLL_MULTIPLIER}
      * <p>
-     * For example, at a value of 10, and assuming a 2 second interval between polls, then polling will be
+     * For example, at a value of 10, and assuming a 2-second interval between polls, then polling will be
      * reported unhealthy if the last poll attempt is more than 20 seconds ago (10 * 2).
      *
      * @see ClientPollerMissedPollHealthCheck

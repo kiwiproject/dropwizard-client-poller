@@ -5,7 +5,7 @@ import static org.kiwiproject.dropwizard.poller.health.ClientPollerTimeBasedHeal
 import static org.kiwiproject.dropwizard.poller.health.ClientPollerTimeBasedHealthCheck.DEFAULT_TIME_WINDOW_MINUTES;
 import static org.kiwiproject.test.validation.ValidationTestHelper.assertPropertyViolations;
 
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Configuration;
 import io.dropwizard.util.Duration;
 import lombok.Getter;
 import lombok.Setter;

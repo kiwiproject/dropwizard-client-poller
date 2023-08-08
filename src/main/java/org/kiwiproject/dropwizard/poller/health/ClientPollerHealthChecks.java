@@ -1,13 +1,12 @@
 package org.kiwiproject.dropwizard.poller.health;
 
-import static java.util.stream.Collectors.toUnmodifiableList;
 import static org.kiwiproject.base.KiwiStrings.format;
 import static org.kiwiproject.metrics.health.HealthCheckResults.newUnhealthyResultBuilder;
 
 import com.codahale.metrics.health.HealthCheck;
 import com.codahale.metrics.health.HealthCheck.Result;
 import com.google.common.annotations.VisibleForTesting;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
@@ -103,7 +102,7 @@ public class ClientPollerHealthChecks {
                                    Object... args) {
         return newUnhealthyResultBuilder(severity)
                 .withMessage(messageTemplate, args)
-                .withDetail(FAILURE_DETAILS_KEY, statistics.recentFailureDetails().collect(toUnmodifiableList()))
+                .withDetail(FAILURE_DETAILS_KEY, statistics.recentFailureDetails().toList())
                 .build();
     }
 

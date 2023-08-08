@@ -11,7 +11,10 @@ import static org.kiwiproject.concurrent.Async.withMaxTimeout;
 import static org.kiwiproject.jaxrs.KiwiResponses.closeQuietly;
 
 import com.google.common.annotations.VisibleForTesting;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
+import jakarta.ws.rs.client.SyncInvoker;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriBuilder;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,9 +25,6 @@ import org.kiwiproject.dropwizard.poller.health.ClientPollerHealthChecks;
 import org.kiwiproject.dropwizard.poller.metrics.ClientPollerStatistics;
 import org.kiwiproject.dropwizard.poller.metrics.DefaultClientPollerStatistics;
 
-import javax.ws.rs.client.SyncInvoker;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
@@ -97,7 +97,7 @@ public class ClientPoller {
      * The URI the poller is polling. This will be set if the {@link SyncInvoker} provided is an instance of
      * {@link PollerSyncInvokerWrapper}
      * <p>
-     * NOTE: only used for logging purposes. It will be overwritten so we should not ever manually set it.
+     * NOTE: only used for logging purposes. It will be overwritten, so we should not ever manually set it.
      */
     private URI uri;
 
@@ -173,7 +173,7 @@ public class ClientPoller {
     private final long executionInterval;
 
     /**
-     * The executor the poller should use to scheduled a fixed-rate or fixed-delay poll. <em>Required.</em>
+     * The executor the poller should use to schedule a fixed-rate or fixed-delay poll. <em>Required.</em>
      */
     private final ScheduledExecutorService executor;
 
@@ -286,13 +286,11 @@ public class ClientPoller {
     }
 
     /**
-     * @implNote We could replace this validation with Lombok's {@code @NonNull} annotation. However we would
+     * @implNote We could replace this validation with Lombok's {@code @NonNull} annotation. However, we would
      * then get {@link NullPointerException} when calling the build method on the builder, instead of
      * the {@link IllegalStateException} that is thrown here. It seems throwing an {@link IllegalStateException}
      * is more appropriate than NPE in this case, or at least more clear.
      */
-    // Following suppression is because some of the fields CAN be null if explicitly nullified when building a poller
-    @SuppressWarnings("ConstantConditions")
     private void validateInternalState() {
         checkState(nonNull(supplier), "supplier cannot be null");
         checkState(nonNull(consumerType), "consumerType cannot be null");
@@ -374,8 +372,8 @@ public class ClientPoller {
     }
 
     private void updateUri(SyncInvoker invoker) {
-        if (invoker instanceof PollerSyncInvokerWrapper) {
-            String currentUri = ((PollerSyncInvokerWrapper) invoker).getUri();
+        if (invoker instanceof PollerSyncInvokerWrapper wrapper) {
+            String currentUri = wrapper.getUri();
             uri = UriBuilder.fromPath(currentUri).build();
         }
     }
