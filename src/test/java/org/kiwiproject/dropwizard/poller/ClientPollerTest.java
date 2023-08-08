@@ -386,6 +386,43 @@ class ClientPollerTest {
     class DifficultToTestMethods {
 
         @Nested
+        class UpdateUri {
+
+            private ClientPoller poller;
+            private PollerSyncInvokerWrapper wrappedInvoker;
+
+            @BeforeEach
+            void setUp() {
+                wrappedInvoker = PollerSyncInvokerWrapper.builder()
+                        .delegateSyncInvoker(invoker)
+                        .uri("https://localhost:10042")
+                        .build();
+
+                poller = ClientPoller.builder()
+                        .consumer(consumer)
+                        .supplier(() -> wrappedInvoker)
+                        .executor(executor)
+                        .executionInterval(intervalInMillis)
+                        .build();
+            }
+
+            @Test
+            void shouldUpdateUri_WhenGivenWrapper() {
+                var uri = poller.updateUri(wrappedInvoker);
+                assertThat(uri)
+                        .hasScheme("https")
+                        .hasAuthority("localhost:10042")
+                        .hasNoQuery();
+            }
+
+            @Test
+            void shouldNotUpdateUri_WhenGivenArgument_ThatIsNotWrapper() {
+                var uri = poller.updateUri(invoker);
+                assertThat(uri).isNull();
+            }
+        }
+
+        @Nested
         class WaitForCompletion {
 
             private ClientPoller syncPoller;

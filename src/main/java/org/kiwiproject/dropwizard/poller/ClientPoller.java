@@ -371,11 +371,13 @@ public class ClientPoller {
         }
     }
 
-    private void updateUri(SyncInvoker invoker) {
+    @VisibleForTesting
+    URI updateUri(SyncInvoker invoker) {
         if (invoker instanceof PollerSyncInvokerWrapper wrapper) {
             String currentUri = wrapper.getUri();
             uri = UriBuilder.fromPath(currentUri).build();
         }
+        return uri;
     }
 
     private String uriOrDefault() {
