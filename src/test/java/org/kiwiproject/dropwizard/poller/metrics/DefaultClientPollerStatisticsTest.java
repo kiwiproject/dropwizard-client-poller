@@ -114,6 +114,7 @@ class DefaultClientPollerStatisticsTest {
         assertThat(stats.recentFailureTimesInMillis().count()).isEqualTo(stats.maxRecentFailureTimes());
     }
 
+    @SuppressWarnings({"EmptyMethod", "unused"})
     private void noop(long value) {
     }
 

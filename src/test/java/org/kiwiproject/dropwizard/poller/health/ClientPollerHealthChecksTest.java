@@ -9,8 +9,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.codahale.metrics.health.HealthCheck;
 import com.codahale.metrics.health.HealthCheckRegistry;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -97,7 +98,16 @@ class ClientPollerHealthChecksTest {
             var registry = mock(HealthCheckRegistry.class);
             when(env.healthChecks()).thenReturn(registry);
 
-            ClientPollerHealthChecks.registerPollerHealthChecks(poller, env);
+            var pollerHealthChecks = ClientPollerHealthChecks.registerPollerHealthChecks(poller, env);
+            var healthCheckClassNames = pollerHealthChecks.stream()
+                    .map(ClientPollerHealthChecks.PollerHealthCheck::getHealthCheck)
+                    .map(HealthCheck::getClass)
+                    .map(Class::getName)
+                    .toList();
+            assertThat(healthCheckClassNames).containsExactlyInAnyOrder(
+                    ClientPollerTimeBasedHealthCheck.class.getName(),
+                    ClientPollerLatencyBasedHealthCheck.class.getName(),
+                    ClientPollerMissedPollHealthCheck.class.getName());
 
             verify(registry).register(eq(ClientPollerTimeBasedHealthCheck.nameFor(pollerName)),
                     isA(ClientPollerTimeBasedHealthCheck.class));

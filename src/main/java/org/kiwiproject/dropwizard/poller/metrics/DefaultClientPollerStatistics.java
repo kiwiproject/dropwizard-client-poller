@@ -27,7 +27,7 @@ import java.util.stream.Stream;
  * <p>
  * This implementation is <em>effectively thread-safe</em> if each {@link ClientPoller} is using its own
  * {@link ClientPollerStatistics} instance. This is true because a poller instance is scheduled to execute at a
- * fixed-rate and so it sleeps, executes, sleeps, executes, etc. Thus there is only <em>one</em> poller instance acting
+ * fixed-rate and so it sleeps, executes, sleeps, executes, etc. Thus, there is only <em>one</em> poller instance acting
  * on its {@link ClientPollerStatistics} instance at any given time.
  */
 @Slf4j
@@ -117,7 +117,7 @@ public class DefaultClientPollerStatistics implements ClientPollerStatistics {
     }
 
     /**
-     * See section "Cumulative moving average" (CMA) on Moving Average page: https://en.wikipedia.org/wiki/Moving_average
+     * See section "Cumulative moving average" (CMA) on <a href="https://en.wikipedia.org/wiki/Moving_average">Moving Average page</a>
      */
     @Override
     public void addPollLatencyMeasurement(long latencyInMillis) {
@@ -225,7 +225,7 @@ public class DefaultClientPollerStatistics implements ClientPollerStatistics {
 
     @VisibleForTesting
     int numberOfFailureDetails() {
-        return (recentFailures.size() > FAILURE_DETAIL_LIMIT) ? FAILURE_DETAIL_LIMIT : recentFailures.size();
+        return Math.min(recentFailures.size(), FAILURE_DETAIL_LIMIT);
     }
 
     @Override
