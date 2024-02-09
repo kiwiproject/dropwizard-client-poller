@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>dropwizard-client-poller</artifactId>
-    <version>2.0.2</version>
+    <version>2.0.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -23,7 +23,7 @@
         <connection>scm:git:https://github.com/kiwiproject/dropwizard-client-poller.git</connection>
         <developerConnection>scm:git:git@github.com:kiwiproject/dropwizard-client-poller.git</developerConnection>
         <url>https://github.com/kiwiproject/dropwizard-client-poller</url>
-        <tag>v2.0.2</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
