@@ -165,7 +165,7 @@ class ClientPollerTest {
 
     @Test
     void testPollersGetADefault_Name_IfNotSupplied() {
-        var poller = ClientPoller.builder()
+        poller = ClientPoller.builder()
                 .consumer(consumer)
                 .supplier(() -> invoker)
                 .executor(executor)
@@ -881,7 +881,7 @@ class ClientPollerTest {
                     .build();
 
             try {
-                when(invoker.get()).thenAnswer(answersWithDelay(500L, (invocationOnMock) -> response));
+                when(invoker.get()).thenAnswer(answersWithDelay(500L, invocationOnMock -> response));
 
                 var startTime = System.currentTimeMillis();
                 startPollerAndStopOnceConditionIsMet(slowPoller, () -> slowPoller.statistics().failureCount() > 0);

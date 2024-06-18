@@ -86,9 +86,9 @@ class PollerHealthCheckConfigTest {
             var path = Paths.get("PollerHealthCheckConfigTest", configFileName);
 
             try {
-                var config = DropwizardConfigurations.newConfiguration(SampleConfig.class, path);
+                var sampleConfig = DropwizardConfigurations.newConfiguration(SampleConfig.class, path);
 
-                return config.getHealthCheckConfig();
+                return sampleConfig.getHealthCheckConfig();
             } catch (Exception e) {
                 throw new AssertionFailedError("Error de-serializing config at path: " + path, e);
             }

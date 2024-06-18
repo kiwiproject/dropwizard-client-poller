@@ -1,6 +1,5 @@
 package org.kiwiproject.dropwizard.poller.health;
 
-import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.kiwiproject.base.KiwiStrings.f;
 import static org.mockito.ArgumentMatchers.eq;
@@ -76,7 +75,7 @@ class ClientPollerHealthChecksTest {
 
             var failedResult = ClientPollerHealthChecks.unhealthy(stats, "testMessage %s %d", "foo", 42);
 
-            List<Map<String, Object>> failureDetails = stats.recentFailureDetails().collect(toList());
+            List<Map<String, Object>> failureDetails = stats.recentFailureDetails().toList();
 
             assertThat(failedResult.isHealthy()).isFalse();
             assertThat(failedResult.getMessage()).isEqualTo("testMessage foo 42");
