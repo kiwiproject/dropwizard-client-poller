@@ -1,5 +1,6 @@
 package org.kiwiproject.dropwizard.poller.metrics;
 
+import static java.util.Comparator.reverseOrder;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
@@ -51,8 +52,8 @@ class DefaultClientPollerStatisticsTest {
         softly.assertThat(stats.lastSkipTimeInMillis()).isEmpty();
         softly.assertThat(stats.failureCount()).isZero();
         softly.assertThat(stats.lastFailureTimeInMillis()).isEmpty();
-        softly.assertThat(stats.recentFailureTimesInMillis().collect(toList())).isEmpty();
-        softly.assertThat(stats.recentFailureDetails().collect(toList())).isEmpty();
+        softly.assertThat(stats.recentFailureTimesInMillis().toList()).isEmpty();
+        softly.assertThat(stats.recentFailureDetails().toList()).isEmpty();
     }
 
     @Test
@@ -159,8 +160,7 @@ class DefaultClientPollerStatisticsTest {
 
         softly.assertThat(failureDetails).hasSize(expectedNumberOfFailureDetails);
 
-        List<Long> recentFailureTimes = stats.recentFailureTimesInMillis().collect(toList());
-        Collections.reverse(recentFailureTimes);
+        List<Long> recentFailureTimes = stats.recentFailureTimesInMillis().sorted(reverseOrder()).toList();
 
         // noinspection UnstableApiUsage
         Streams.zip(failureDetails.stream(), recentFailureTimes.stream(),
@@ -181,7 +181,7 @@ class DefaultClientPollerStatisticsTest {
 
         softly.assertThat(stats.failureCount()).isEqualTo(4);
 
-        List<Map<String, Object>> failureDetails = stats.recentFailureDetails().collect(toList());
+        List<Map<String, Object>> failureDetails = stats.recentFailureDetails().toList();
 
         softly.assertThat(failureDetails).hasSize(4);
     }

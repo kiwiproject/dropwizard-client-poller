@@ -224,13 +224,13 @@ class ClientPollerTimeBasedHealthCheckTest {
         @Test
         void whenFailureCount_IsEqualToThresholdWithMultiplier() {
             assertUnhealthyWithComputedFailureCount("WARN",
-                    (maxPollFailuresAllowed, severityThresholdMultiplier) -> severityThresholdMultiplier * maxPollFailuresAllowed);
+                    (maxPollFailuresAllowed, theSeverityThresholdMultiplier) -> theSeverityThresholdMultiplier * maxPollFailuresAllowed);
         }
 
         @Test
         void whenFailureCount_IsOneMoreThanThresholdWithMultiplier() {
             assertUnhealthyWithComputedFailureCount("CRITICAL",
-                    (maxPollFailuresAllowed, severityThresholdMultiplier) -> 1 + (severityThresholdMultiplier * maxPollFailuresAllowed));
+                    (maxPollFailuresAllowed, theSeverityThresholdMultiplier) -> 1 + (theSeverityThresholdMultiplier * maxPollFailuresAllowed));
         }
 
         private void assertUnhealthyWithComputedFailureCount(String expectedSeverity, BiFunction<Long, Integer, Long> failureCountFn) {
