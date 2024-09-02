@@ -30,7 +30,7 @@
         <!-- Versions for required dependencies -->
         <kiwi.version>4.3.0</kiwi.version>
         <kiwi-bom.version>2.0.14</kiwi-bom.version>
-        <metrics-healthchecks-severity.version>2.0.5</metrics-healthchecks-severity.version>
+        <metrics-healthchecks-severity.version>2.0.6</metrics-healthchecks-severity.version>
 
         <!-- Versions for test dependencies -->
         <kiwi-test.version>3.6.0</kiwi-test.version>
