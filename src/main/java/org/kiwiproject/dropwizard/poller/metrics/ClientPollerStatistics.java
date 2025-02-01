@@ -45,7 +45,7 @@ public interface ClientPollerStatistics {
     void incrementSuccessCount();
 
     /**
-     * Increment the number of times polling was skipped.
+     * Increment the number of times that polling was skipped.
      */
     void incrementSkipCount();
 

@@ -24,7 +24,7 @@ import java.time.temporal.TemporalUnit;
 public class ClientPollerTimeBasedHealthCheck extends HealthCheck {
 
     /**
-     * Defines the default threshold for failed polls within time window as 2%
+     * Defines the default threshold for failed polls within the time window as 2%
      */
     public static final int DEFAULT_FAILED_POLLS_UNHEALTHY_THRESHOLD_PERCENT = 2;
 
@@ -285,8 +285,8 @@ public class ClientPollerTimeBasedHealthCheck extends HealthCheck {
     }
 
     /**
-     * @implNote The first three arguments MUST be in the same units, e.g. all milliseconds. The threshold argument
-     * MUST be a decimal value, e.g. 0.03 (for 3%)
+     * @implNote The first three arguments MUST be in the same units, e.g., all milliseconds. The threshold argument
+     * MUST be a decimal value, e.g., 0.03 (for 3%)
      */
     @VisibleForTesting
     static long calculateMaxPollFailuresAllowed(long timeWindow,

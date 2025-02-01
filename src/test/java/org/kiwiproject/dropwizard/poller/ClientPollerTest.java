@@ -450,7 +450,7 @@ class ClientPollerTest {
 
             @AfterEach
             void tearDown() {
-                // If current thread is interrupted, then reset the interrupted status by the following
+                // If the current thread is interrupted, then reset the interrupted status by the following
                 var result = Thread.interrupted();
                 if (result) {
                     LOG.info("Thread interrupted status cleared");
@@ -768,9 +768,9 @@ class ClientPollerTest {
         }
 
         /**
-         * @implNote To verify we don't let any exceptions escape in poll(), and because we have so much exception
-         * handling in ClientPoller already, had to pick something in executePoll() that we would not expect to ever
-         * fail and mock (actually, spy) it such that it actually does throw an exception. This test therefore verifies
+         * @implNote To verify that we don't let any exceptions escape in poll(), and because we have so much exception
+         * handling in ClientPoller already, we had to pick something in executePoll() that we would not expect to ever
+         * fail. So, we mock (actually, spy) it such that it actually does throw an exception. This test therefore verifies
          * that the poller continues to poll despite the exceptions that are being thrown after we've successfully handled
          * a poll response. An edge case to be sure, but we cannot allow exceptions to escape and cause the poller's
          * ScheduledExecutorService to terminate.

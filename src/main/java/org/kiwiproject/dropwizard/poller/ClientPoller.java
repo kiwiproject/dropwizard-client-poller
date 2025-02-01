@@ -41,7 +41,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * Polls a specified HTTP(S) endpoint either synchronously or asynchronously using a JAX-RS {@link SyncInvoker}.
+ * Polls a specified HTTP (or HTTPS) endpoint either synchronously or asynchronously using a JAX-RS {@link SyncInvoker}.
  */
 @Builder
 @Slf4j
@@ -132,14 +132,14 @@ public class ClientPoller {
     private final Long syncConsumerTimeout = DEFAULT_SYNC_RESPONSE_CONSUMER_TIMEOUT;
 
     /**
-     * The unit of the synchronous response consumer time out value.
+     * The unit of the synchronous response consumer timeout value.
      */
     @Getter(AccessLevel.PACKAGE)
     @Builder.Default
     private final TimeUnit syncConsumerTimeoutUnit = DEFAULT_SYNC_RESPONSE_CONSUMER_TIMEOUT_UNIT;
 
     /**
-     * The value after which the {@link #supplier} will time out, e.g. if a poll is taking a very long time.
+     * The value after which the {@link #supplier} will time out, e.g., if a poll is taking a very long time.
      */
     @Getter(AccessLevel.PACKAGE)
     @Builder.Default
@@ -289,7 +289,7 @@ public class ClientPoller {
      * @implNote We could replace this validation with Lombok's {@code @NonNull} annotation. However, we would
      * then get {@link NullPointerException} when calling the build method on the builder, instead of
      * the {@link IllegalStateException} that is thrown here. It seems throwing an {@link IllegalStateException}
-     * is more appropriate than NPE in this case, or at least more clear.
+     * is more appropriate than NPE in this case, or at least clearer.
      */
     private void validateInternalState() {
         checkState(nonNull(supplier), "supplier cannot be null");
