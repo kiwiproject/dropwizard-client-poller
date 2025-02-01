@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static org.kiwiproject.base.KiwiPreconditions.checkArgumentNotNull;
 import static org.kiwiproject.base.KiwiPreconditions.requireNotNull;
 import static org.kiwiproject.metrics.health.HealthCheckResults.newHealthyResult;
-import static org.kiwiproject.time.KiwiDurationFormatters.formatDurationWords;
+import static org.kiwiproject.time.KiwiDurationFormatters.formatMillisecondDurationWords;
 
 import com.codahale.metrics.health.HealthCheck;
 import com.google.common.annotations.VisibleForTesting;
@@ -57,9 +57,9 @@ public class ClientPollerMissedPollHealthCheck extends HealthCheck {
 
         LOG.info("For poller with execution interval {} and missing poll multiplier {}," +
                         " using {} as the missing poll alert threshold, after which we will report the poller unhealthy",
-                formatDurationWords(poller.getExecutionInterval()),
+                formatMillisecondDurationWords(poller.getExecutionInterval()),
                 this.missingPollMultiplier,
-                formatDurationWords(missingPollAlertThresholdMillis));
+                formatMillisecondDurationWords(missingPollAlertThresholdMillis));
     }
 
     /**

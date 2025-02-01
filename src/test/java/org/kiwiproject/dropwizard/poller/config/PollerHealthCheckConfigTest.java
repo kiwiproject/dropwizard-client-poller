@@ -50,13 +50,12 @@ class PollerHealthCheckConfigTest {
             assertDefaultValues(softly);
         }
 
-    }
-
-    private void assertDefaultValues(SoftAssertions softly) {
-        softly.assertThat(config.getTimeWindow().toMinutes()).isEqualTo(15);
-        softly.assertThat(config.getFailedPollsThresholdPercent()).isEqualTo(2);
-        softly.assertThat(config.getAverageLatencyWarningThreshold().toMilliseconds()).isEqualTo(DEFAULT_AVG_LATENCY_WARNING_THRESHOLD_MILLIS);
-        softly.assertThat(config.getMissingPollMultiplier()).isEqualTo(10);
+        private void assertDefaultValues(SoftAssertions softly) {
+            softly.assertThat(config.getTimeWindow().toMinutes()).isEqualTo(15);
+            softly.assertThat(config.getFailedPollsThresholdPercent()).isEqualTo(2);
+            softly.assertThat(config.getAverageLatencyWarningThreshold().toMilliseconds()).isEqualTo(DEFAULT_AVG_LATENCY_WARNING_THRESHOLD_MILLIS);
+            softly.assertThat(config.getMissingPollMultiplier()).isEqualTo(10);
+        }
     }
 
     @Nested

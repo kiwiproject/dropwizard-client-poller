@@ -68,7 +68,7 @@ public class DefaultClientPollerStatistics implements ClientPollerStatistics {
     }
 
     /**
-     * @implNote This is left public for now, so we can expose it with new methods, e.g. one that returns a
+     * @implNote This is left public for now, so we can expose it with new methods, e.g., one that returns a
      * {@code Stream<FailedPollResult>}.
      */
     @SuppressWarnings("WeakerAccess")
