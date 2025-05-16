@@ -1,6 +1,6 @@
 ### Dropwizard Client Poller
 
-[![Build](https://github.com/kiwiproject/dropwizard-client-poller/workflows/build/badge.svg)](https://github.com/kiwiproject/dropwizard-client-poller/actions?query=workflow%3Abuild)
+[![Build](https://github.com/kiwiproject/dropwizard-client-poller/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/kiwiproject/dropwizard-client-poller/actions/workflows/build.yml?query=branch%3Amain)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kiwiproject_dropwizard-client-poller&metric=alert_status)](https://sonarcloud.io/dashboard?id=kiwiproject_dropwizard-client-poller)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=kiwiproject_dropwizard-client-poller&metric=coverage)](https://sonarcloud.io/dashboard?id=kiwiproject_dropwizard-client-poller)
 [![CodeQL](https://github.com/kiwiproject/dropwizard-client-poller/actions/workflows/codeql.yml/badge.svg)](https://github.com/kiwiproject/dropwizard-client-poller/actions/workflows/codeql.yml)
