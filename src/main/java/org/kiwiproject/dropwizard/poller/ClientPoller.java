@@ -512,7 +512,7 @@ public class ClientPoller {
 
     private static ThreadFactory buildDefaultConsumerThreadFactory(ClientPollerStatistics stats) {
         checkArgumentNotNull(stats, "stats cannot be null");
-        return new BasicThreadFactory.Builder()
+        return BasicThreadFactory.builder()
                 .namingPattern("DefaultConsumerThread-%d")
                 .daemon(false)
                 .priority(Thread.NORM_PRIORITY)

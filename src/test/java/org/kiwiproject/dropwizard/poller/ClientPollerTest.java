@@ -444,8 +444,7 @@ class ClientPollerTest {
                         .executionInterval(intervalInMillis)
                         .build();
 
-                //noinspection unchecked
-                future = mock(CompletableFuture.class);
+                future = mock();
             }
 
             @AfterEach
