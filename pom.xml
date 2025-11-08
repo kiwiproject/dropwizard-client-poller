@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.kiwiproject</groupId>
         <artifactId>kiwi-parent</artifactId>
-        <version>3.0.33</version>
+        <version>3.0.34</version>
     </parent>
 
     <artifactId>dropwizard-client-poller</artifactId>
@@ -28,9 +28,9 @@
 
     <properties>
         <!-- Versions for required dependencies -->
-        <kiwi.version>4.14.0</kiwi.version>
-        <kiwi-bom.version>2.2.0</kiwi-bom.version>
-        <metrics-healthchecks-severity.version>2.1.4</metrics-healthchecks-severity.version>
+        <kiwi.version>4.14.1</kiwi.version>
+        <kiwi-bom.version>2.3.0</kiwi-bom.version>
+        <metrics-healthchecks-severity.version>2.1.5</metrics-healthchecks-severity.version>
 
         <!-- Versions for test dependencies -->
         <kiwi-test.version>3.12.1</kiwi-test.version>
