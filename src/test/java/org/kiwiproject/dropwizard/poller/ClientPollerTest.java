@@ -642,13 +642,12 @@ class ClientPollerTest {
 
             assertThat(pollerWithMetrics).isSameAs(poller);
 
-            assertThat(registry.getGauges().keySet()).contains(
-                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "count"),
-                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "success-count"),
-                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "failure-count"),
-                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "skip-count"),
-                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "average-poll-latency-ms")
-            );
+            assertThat(registry.getGauges())
+                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "count"))
+                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "success-count"))
+                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "failure-count"))
+                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "skip-count"))
+                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "average-poll-latency-ms"));
         }
 
         @Test
@@ -659,13 +658,12 @@ class ClientPollerTest {
 
             assertThat(pollerWithMetrics).isSameAs(poller);
 
-            assertThat(registry.getGauges().keySet()).contains(
-                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "count"),
-                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "success-count"),
-                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "failure-count"),
-                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "skip-count"),
-                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "average-poll-latency-ms")
-            );
+            assertThat(registry.getGauges())
+                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "count"))
+                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "success-count"))
+                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "failure-count"))
+                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "skip-count"))
+                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "average-poll-latency-ms"));
         }
 
         @Test
