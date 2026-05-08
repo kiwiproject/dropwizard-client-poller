@@ -2,6 +2,7 @@ package org.kiwiproject.dropwizard.poller;
 
 import static java.util.Objects.nonNull;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.awaitility.Awaitility.await;
@@ -20,6 +21,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import io.dropwizard.core.setup.Environment;
 import jakarta.ws.rs.ProcessingException;
@@ -634,7 +636,7 @@ class ClientPollerTest {
         @Test
         void testRegisterMetrics_UsingFluentApiMethod_AndRegisterMetrics_WithEnvironment() {
             var env = mock(Environment.class);
-            var registry = new com.codahale.metrics.MetricRegistry();
+            var registry = new MetricRegistry();
 
             when(env.metrics()).thenReturn(registry);
 
@@ -643,27 +645,27 @@ class ClientPollerTest {
             assertThat(pollerWithMetrics).isSameAs(poller);
 
             assertThat(registry.getGauges())
-                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "count"))
-                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "success-count"))
-                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "failure-count"))
-                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "skip-count"))
-                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "average-poll-latency-ms"));
+                    .containsKey(metricName(poller.getName(),"count"))
+                    .containsKey(metricName(poller.getName(),"success-count"))
+                    .containsKey(metricName(poller.getName(),"failure-count"))
+                    .containsKey(metricName(poller.getName(),"skip-count"))
+                    .containsKey(metricName(poller.getName(),"average-poll-latency-ms"));
         }
 
         @Test
         void testRegisterMetrics_UsingFluentApiMethod_AndRegisterMetrics_WithMetricRegistry() {
-            var registry = new com.codahale.metrics.MetricRegistry();
+            var registry = new MetricRegistry();
 
             var pollerWithMetrics = poller.andRegisterMetrics(registry);
 
             assertThat(pollerWithMetrics).isSameAs(poller);
 
             assertThat(registry.getGauges())
-                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "count"))
-                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "success-count"))
-                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "failure-count"))
-                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "skip-count"))
-                    .containsKey(org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "average-poll-latency-ms"));
+                    .containsKey(metricName(poller.getName(),"count"))
+                    .containsKey(metricName(poller.getName(),"success-count"))
+                    .containsKey(metricName(poller.getName(),"failure-count"))
+                    .containsKey(metricName(poller.getName(),"skip-count"))
+                    .containsKey(metricName(poller.getName(),"average-poll-latency-ms"));
         }
 
         @Test

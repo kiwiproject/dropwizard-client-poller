@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import com.codahale.metrics.Gauge;
 import com.codahale.metrics.MetricRegistry;
 import io.dropwizard.core.setup.Environment;
+import jakarta.ws.rs.client.SyncInvoker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -25,7 +26,7 @@ class ClientPollerMetricsTest {
     void setUp() {
         poller = ClientPoller.builder()
                 .name("TestPoller")
-                .supplier(() -> mock(jakarta.ws.rs.client.SyncInvoker.class))
+                .supplier(() -> mock(SyncInvoker.class))
                 .consumer(response -> {})
                 .executor(Executors.newSingleThreadScheduledExecutor())
                 .executionInterval(1000)
