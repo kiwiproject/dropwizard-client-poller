@@ -33,6 +33,7 @@ public class ClientPollerMetrics {
      * @param poller   the poller whose statistics to expose
      * @param registry the metric registry
      * @return the list of registered metric names
+     * @throws IllegalArgumentException if any of the metric names are already registered
      */
     public static List<String> registerPollerMetrics(ClientPoller poller, MetricRegistry registry) {
         var stats = poller.statistics();
