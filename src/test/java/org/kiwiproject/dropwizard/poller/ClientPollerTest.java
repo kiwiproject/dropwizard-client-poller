@@ -632,6 +632,43 @@ class ClientPollerTest {
         }
 
         @Test
+        void testRegisterMetrics_UsingFluentApiMethod_AndRegisterMetrics_WithEnvironment() {
+            var env = mock(Environment.class);
+            var registry = new com.codahale.metrics.MetricRegistry();
+
+            when(env.metrics()).thenReturn(registry);
+
+            var pollerWithMetrics = poller.andRegisterMetrics(env);
+
+            assertThat(pollerWithMetrics).isSameAs(poller);
+
+            assertThat(registry.getGauges().keySet()).contains(
+                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "count"),
+                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "success-count"),
+                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "failure-count"),
+                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "skip-count"),
+                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "average-poll-latency-ms")
+            );
+        }
+
+        @Test
+        void testRegisterMetrics_UsingFluentApiMethod_AndRegisterMetrics_WithMetricRegistry() {
+            var registry = new com.codahale.metrics.MetricRegistry();
+
+            var pollerWithMetrics = poller.andRegisterMetrics(registry);
+
+            assertThat(pollerWithMetrics).isSameAs(poller);
+
+            assertThat(registry.getGauges().keySet()).contains(
+                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "count"),
+                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "success-count"),
+                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "failure-count"),
+                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "skip-count"),
+                    org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics.metricName(poller.getName(), "average-poll-latency-ms")
+            );
+        }
+
+        @Test
         void testCannotStart_UnlessExecutionIntervalIsPositive() {
             var illegalExecutionIntervalPoller = ClientPoller.builder()
                     .supplier(() -> invoker)

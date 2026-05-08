@@ -10,6 +10,7 @@ import static org.kiwiproject.concurrent.Async.doAsync;
 import static org.kiwiproject.concurrent.Async.withMaxTimeout;
 import static org.kiwiproject.jaxrs.KiwiResponses.closeQuietly;
 
+import com.codahale.metrics.MetricRegistry;
 import com.google.common.annotations.VisibleForTesting;
 import io.dropwizard.core.setup.Environment;
 import jakarta.ws.rs.client.SyncInvoker;
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.kiwiproject.dropwizard.poller.config.PollerHealthCheckConfig;
 import org.kiwiproject.dropwizard.poller.health.ClientPollerHealthChecks;
+import org.kiwiproject.dropwizard.poller.metrics.ClientPollerMetrics;
 import org.kiwiproject.dropwizard.poller.metrics.ClientPollerStatistics;
 import org.kiwiproject.dropwizard.poller.metrics.DefaultClientPollerStatistics;
 
@@ -244,6 +246,52 @@ public class ClientPoller {
      */
     public ClientPoller andRegisterHealthChecks(Environment environment, PollerHealthCheckConfig healthCheckConfig) {
         return registerHealthChecks(environment, healthCheckConfig);
+    }
+
+    /**
+     * Registers poller statistics as Dropwizard Metrics gauges using the given environment's {@link MetricRegistry}.
+     *
+     * @param environment the Dropwizard environment
+     * @return this poller
+     * @see ClientPollerMetrics#registerPollerMetrics(ClientPoller, Environment)
+     */
+    public ClientPoller registerMetrics(Environment environment) {
+        ClientPollerMetrics.registerPollerMetrics(this, environment);
+        return this;
+    }
+
+    /**
+     * Registers poller statistics as Dropwizard Metrics gauges into the given {@link MetricRegistry}.
+     *
+     * @param metricRegistry the metric registry
+     * @return this poller
+     * @see ClientPollerMetrics#registerPollerMetrics(ClientPoller, MetricRegistry)
+     */
+    public ClientPoller registerMetrics(MetricRegistry metricRegistry) {
+        ClientPollerMetrics.registerPollerMetrics(this, metricRegistry);
+        return this;
+    }
+
+    /**
+     * Named specifically to be used as part of the fluent builder API, e.g.
+     * {@code poller = ClientPoller.builder()...build().andRegisterMetrics(env);}
+     *
+     * @param environment the Dropwizard environment
+     * @return this poller
+     */
+    public ClientPoller andRegisterMetrics(Environment environment) {
+        return registerMetrics(environment);
+    }
+
+    /**
+     * Named specifically to be used as part of the fluent builder API, e.g.
+     * {@code poller = ClientPoller.builder()...build().andRegisterMetrics(metricRegistry);}
+     *
+     * @param metricRegistry the metric registry
+     * @return this poller
+     */
+    public ClientPoller andRegisterMetrics(MetricRegistry metricRegistry) {
+        return registerMetrics(metricRegistry);
     }
 
     /**
